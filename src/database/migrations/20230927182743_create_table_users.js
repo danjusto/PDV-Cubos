@@ -7,7 +7,6 @@ exports.up = function(knex) {
         table.string('senha', 255).notNullable();
     })
 };
-
 exports.down = function(knex) {
   return knex.schema.dropTable('users');
 };

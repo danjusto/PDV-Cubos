@@ -5,7 +5,6 @@ exports.up = function(knex) {
         table.string('descricao', 255).notNullable();
     })
 };
-
 exports.down = function(knex) {
   return knex.schema.dropTable('categories')
 };
