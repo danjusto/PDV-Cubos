@@ -8,4 +8,12 @@ const insertUser = async (nome, email, senha) => {
     return await knex('users').insert({nome, email, senha}).returning(['id', 'nome', 'email']);
 }
 
-module.exports = {findByEmail, insertUser}
+const updateUser = async (nome, email, senha) => {
+    return await knex('users').where('email', email).update({nome, email, senha}).returning(['id', 'nome', 'email']);
+}
+
+module.exports = {
+  findByEmail,
+  insertUser,
+  updateUser
+}
