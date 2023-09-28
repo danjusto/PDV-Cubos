@@ -7,7 +7,7 @@
     "dev": "npm run migrate && npm run seed && nodemon ./src/index.js",
     "migrate": "knex migrate:latest",
     "seed": "knex seed:run",
-    "start": "npm run migrate && npm run seed && node ./src/index.js"
+    "start": "knex migrate:latest && knex seed:run && node ./src/index.js"
   },
   "keywords": [],
   "author": "",
