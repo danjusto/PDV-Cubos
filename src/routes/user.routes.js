@@ -1,11 +1,11 @@
 const { Router } = require('express');
 const { createUser, updateUser } = require('../controller/userController');
+const validateUserBody = require('../middlewares/validateUserBody');
+const userSchema = require('../schemas/user');
+
 const routes = Router();
 
-routes.post('/', createUser);
-
-
-
+routes.post('/', validateUserBody(userSchema), createUser);
 routes.put('/', updateUser);
 
 module.exports = routes;
