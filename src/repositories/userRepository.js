@@ -21,14 +21,9 @@ const getUserById = async (id) => {
   return await knex('users').where('id', id).first();
 };
 
-const findUserById = async (id) => {
-  return await knex('users').where('id', id).select('id', 'nome', 'email');
-};
-
 module.exports = {
   findByEmail,
   insertUser,
   getUserById,
   updateUser,
-  findUserById,
 };

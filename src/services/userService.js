@@ -4,7 +4,6 @@ const {
   insertUser,
   updateUser,
   getUserById,
-  findUserById,
 } = require('../repositories/userRepository');
 const AppError = require('../errors/AppError');
 
@@ -30,12 +29,12 @@ const executeUpdate = async (id, nome, email, senha) => {
 };
 
 const executeUserDetail = async (id) => {
-  const userLogged = await findUserById(id);
-  if (!userLogged[0]) {
+  const userLogged = await getUserById(id);
+  if (!userLogged) {
     throw new AppError('Usuário não encontrado.', 404); // ou 403 Forbidden?
   }
-
-  return userLogged[0];
+  delete userLogged.senha;
+  return userLogged;
 };
 
 module.exports = { executeCreate, executeUpdate, executeUserDetail };

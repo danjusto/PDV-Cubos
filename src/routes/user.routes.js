@@ -11,6 +11,6 @@ const routes = Router();
 
 routes.post('/', validateUserBody(userSchema), createUser);
 routes.put('/:id', validateUserBody(userSchema), updateUser);
-routes.get('/', detailUser);
+routes.get('/:id', detailUser);
 
 module.exports = routes;

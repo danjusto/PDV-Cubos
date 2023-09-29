@@ -33,7 +33,7 @@ const updateUser = async (req, res) => {
 };
 
 const detailUser = async (req, res) => {
-  const { id } = req.query;
+  const { id } = req.params;
   try {
     const loggedUser = await executeUserDetail(id);
     return res.status(200).json(loggedUser);
