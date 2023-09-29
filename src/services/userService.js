@@ -27,7 +27,7 @@ const executeUpdate = async (id, nome, email, senha) => {
 
   const encryptPassword = await bcrypt.hash(senha, 10);
 
-  const userUpdated = await updateUser(id, nome, email, encryptPassword);
+  await updateUser(id, nome, email, encryptPassword);
 };
 
 module.exports = {
