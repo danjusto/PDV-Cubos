@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const {
   findByEmail,
   insertUser,
+  updateUser,
+  getUserById,
   findUserById,
 } = require('../repositories/userRepository');
 const AppError = require('../errors/AppError');
@@ -16,12 +18,24 @@ const executeCreate = async (nome, email, senha) => {
   return userCreated[0];
 };
 
+const executeUpdate = async (id, nome, email, senha) => {
+  const userExists = await getUserById(id);
+  const checkEmailExists = await findByEmail(email);
+  if (checkEmailExists && checkEmailExists.id !== userExists.id) {
+    throw new AppError('Email already exists.', 400);
+  }
+
+  const encryptPassword = await bcrypt.hash(senha, 10);
+  await updateUser(id, nome, email, encryptPassword);
+};
+
 const executeUserDetail = async (id) => {
   const userLogged = await findUserById(id);
   if (!userLogged[0]) {
     throw new AppError('Usuário não encontrado.', 404); // ou 403 Forbidden?
   }
+
   return userLogged[0];
 };
 
-module.exports = { executeCreate, executeUserDetail };
+module.exports = { executeCreate, executeUpdate, executeUserDetail };
