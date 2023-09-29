@@ -18,8 +18,8 @@ const updateUser = async (req, res) => {
   const { nome, email, senha } = req.body;
   const { id } = req.params;
   try {
-    const updateUser = await executeUpdate(id, nome, email, senha);
-    return res.status(201).json({mensage: "usuario editado com sucesso"});
+    await executeUpdate(id, nome, email, senha);
+    return res.status(204).json();
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });
