@@ -6,6 +6,6 @@ const userSchema = require('../schemas/user');
 const routes = Router();
 
 routes.post('/', validateUserBody(userSchema), createUser);
-routes.put('/', updateUser);
+routes.put('/:id', validateUserBody(userSchema), updateUser);
 
 module.exports = routes;

@@ -16,8 +16,9 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { nome, email, senha } = req.body;
+  const { id } = req.params;
   try {
-    const updateUser = await executeUpdate(nome, email, senha);
+    const updateUser = await executeUpdate(id, nome, email, senha);
     return res.status(201).json({mensage: "usuario editado com sucesso"});
   } catch (error) {
     if (error instanceof AppError) {
