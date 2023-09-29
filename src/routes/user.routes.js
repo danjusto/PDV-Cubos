@@ -1,8 +1,12 @@
 const { Router } = require('express');
-const { createUser, loginUser } = require('../controller/userController');
+const { createUser, updateUser, loginUser } = require('../controller/userController');
+const validateUserBody = require('../middlewares/validateUserBody');
+const userSchema = require('../schemas/user');
+
 const routes = Router();
 
-routes.post('/', createUser);
+routes.post('/', validateUserBody(userSchema), createUser);
+routes.put('/:id', validateUserBody(userSchema), updateUser);
 routes.post('/', loginUser);
 
 module.exports = routes;
