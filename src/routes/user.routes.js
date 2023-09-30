@@ -1,16 +1,13 @@
 const { Router } = require('express');
-const {
-  createUser,
-  updateUser,
-  detailUser,
-} = require('../controller/userController');
+const { createUser, updateUser, detailUser } = require('../controller/userController');
 const validateUserBody = require('../middlewares/validateUserBody');
-const userSchema = require('../schemas/user');
+const validateToken = require('../middlewares/validateToken')
+const { user } = require('../schemas/user');
 
 const routes = Router();
 
-routes.post('/', validateUserBody(userSchema), createUser);
-routes.put('/:id', validateUserBody(userSchema), updateUser);
-routes.get('/:id', detailUser);
+routes.post('/', validateUserBody(user), createUser);
+routes.put('/', validateToken, validateUserBody(user), updateUser);
+routes.get('/', validateToken, detailUser);
 
 module.exports = routes;
