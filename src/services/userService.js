@@ -1,5 +1,10 @@
 const bcrypt = require('bcrypt');
-const { findByEmail, insertUser, updateUser, getUserById } = require('../repositories/userRepository');
+const {
+  findByEmail,
+  insertUser,
+  updateUser,
+  getUserById,
+} = require('../repositories/userRepository');
 const AppError = require('../errors/AppError');
 const { generateToken } = require('../utils/auth');
 
@@ -30,6 +35,7 @@ const executeUserDetail = async (id) => {
   }
   delete userLogged.senha;
   return userLogged;
+};
 
 const executeLogin = async (email, senha) => {
   const userExists = await findByEmail(email);
@@ -38,9 +44,14 @@ const executeLogin = async (email, senha) => {
   }
   const passwordMatch = await bcrypt.compare(senha, userExists.senha);
   if (!passwordMatch) {
-    throw new AppError('Invalid password', 401)
+    throw new AppError('Invalid password', 401);
   }
   return generateToken(userExists.id);
-}
+};
 
-module.exports = { executeCreate, executeUpdate, executeUserDetail, executeLogin };
+module.exports = {
+  executeCreate,
+  executeUpdate,
+  executeUserDetail,
+  executeLogin,
+};

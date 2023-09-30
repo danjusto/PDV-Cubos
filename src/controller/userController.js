@@ -1,5 +1,10 @@
 const AppError = require('../errors/AppError');
-const { executeCreate, executeUpdate, executeLogin, executeUserDetail } = require('../services/userService');
+const {
+  executeCreate,
+  executeUpdate,
+  executeLogin,
+  executeUserDetail,
+} = require('../services/userService');
 
 const createUser = async (req, res) => {
   const { nome, email, senha } = req.body;
@@ -16,7 +21,7 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { nome, email, senha } = req.body;
-  const id = req.userId
+  const id = req.userId;
   try {
     await executeUpdate(id, nome, email, senha);
     return res.status(204).json();
@@ -39,6 +44,7 @@ const detailUser = async (req, res) => {
     }
     return res.status(500).json({ message: 'Server error.' });
   }
+};
 
 const loginUser = async (req, res) => {
   const { email, senha } = req.body;
@@ -47,7 +53,7 @@ const loginUser = async (req, res) => {
     const token = await executeLogin(email, senha);
     return res.status(200).json({ type: 'Bearer', token });
   } catch (error) {
-    return res.status(500).json({ message: "Server error." });
+    return res.status(500).json({ message: 'Server error.' });
   }
 };
 
