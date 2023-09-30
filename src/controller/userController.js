@@ -34,7 +34,7 @@ const updateUser = async (req, res) => {
 };
 
 const detailUser = async (req, res) => {
-  const { id } = req.params;
+  const id = req.userId;
   try {
     const loggedUser = await executeUserDetail(id);
     return res.status(200).json(loggedUser);
@@ -53,6 +53,7 @@ const loginUser = async (req, res) => {
     const token = await executeLogin(email, senha);
     return res.status(200).json({ type: 'Bearer', token });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: 'Server error.' });
   }
 };
