@@ -1,5 +1,6 @@
 const AppError = require('../errors/AppError');
-const { executeCreate, executeUpdate } = require('../services/userService');
+const auth = require('../utils/auth');
+const { executeCreate, executeUpdate, executeLogin } = require('../services/userService');
 
 const createUser = async (req, res) => {
   const { nome, email, senha } = req.body;
@@ -16,7 +17,7 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { nome, email, senha } = req.body;
-  const { id } = req.params;
+  const id = req.userId
   try {
     await executeUpdate(id, nome, email, senha);
     return res.status(204).json();
@@ -28,7 +29,19 @@ const updateUser = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  const { email, senha } = req.body;
+
+  try {
+    const token = await executeLogin(email, senha);
+    return res.status(200).json({ type: 'Bearer', token });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error." });
+  }
+};
+
 module.exports = {
   createUser,
-  updateUser
+  updateUser,
+  loginUser
 };

@@ -6,6 +6,7 @@ const {
   getUserById,
 } = require('../repositories/userRepository');
 const AppError = require('../errors/AppError');
+const { generateToken } = require('../utils/auth');
 
 const executeCreate = async (nome, email, senha) => {
   const checkEmailExists = await findByEmail(email);
@@ -30,7 +31,25 @@ const executeUpdate = async (id, nome, email, senha) => {
   await updateUser(id, nome, email, encryptPassword);
 };
 
+const executeLogin = async (email, senha) => {
+  const userExists = await findByEmail(email);
+
+  if (!userExists) {
+    throw new AppError('User not found', 404);
+  }
+
+  const passwordMatch = await bcrypt.compare(senha, userExists.senha);
+
+  if (!passwordMatch) {
+    throw new AppError('Invalid password', 401)
+  }
+
+  return generateToken(userExists.id);
+}
+
+
 module.exports = {
   executeCreate,
   executeUpdate,
+  executeLogin,
 };
