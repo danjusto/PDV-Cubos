@@ -16,7 +16,7 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { nome, email, senha } = req.body;
-  const id = req.userId
+  const id = req.userId;
   try {
     await executeUpdate(id, nome, email, senha);
     return res.status(204).json();
@@ -29,7 +29,7 @@ const updateUser = async (req, res) => {
 };
 
 const detailUser = async (req, res) => {
-  const { id } = req.params;
+  const id = req.userId;
   try {
     const loggedUser = await executeUserDetail(id);
     return res.status(200).json(loggedUser);
@@ -39,6 +39,7 @@ const detailUser = async (req, res) => {
     }
     return res.status(500).json({ message: 'Server error.' });
   }
+}
 
 const loginUser = async (req, res) => {
   const { email, senha } = req.body;

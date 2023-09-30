@@ -30,6 +30,7 @@ const executeUserDetail = async (id) => {
   }
   delete userLogged.senha;
   return userLogged;
+}
 
 const executeLogin = async (email, senha) => {
   const userExists = await findByEmail(email);
