@@ -43,11 +43,13 @@ const detailUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, senha } = req.body;
-
   try {
     const token = await executeLogin(email, senha);
     return res.status(200).json({ type: 'Bearer', token });
   } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
     return res.status(500).json({ message: "Server error." });
   }
 };

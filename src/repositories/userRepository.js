@@ -4,6 +4,10 @@ const findByEmail = async (email) => {
   return await knex('users').where('email', email).first();
 };
 
+const findByEmailAndDifferentId = async (email, id) => {
+  return await knex('users').where('email', email).andWhere('id', '!=', id).first();
+};
+
 const insertUser = async (nome, email, senha) => {
   return await knex('users')
     .insert({ nome, email, senha })
@@ -23,6 +27,7 @@ const getUserById = async (id) => {
 
 module.exports = {
   findByEmail,
+  findByEmailAndDifferentId,
   insertUser,
   getUserById,
   updateUser,
