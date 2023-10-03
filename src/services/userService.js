@@ -5,7 +5,6 @@ const { generateToken } = require('../utils/auth');
 
 const executeCreate = async (nome, email, senha) => {
   const checkEmailExists = await findByEmail(email);
-  console.log(checkEmailExists)
   if (checkEmailExists) {
     throw new AppError('Email already exists.', 400);
   }
