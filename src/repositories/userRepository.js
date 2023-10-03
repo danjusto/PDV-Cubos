@@ -25,7 +25,10 @@ const updateUser = async (id, nome, email, senha) => {
 };
 
 const getUserById = async (id) => {
-  return await knex('users').where('id', id).select('id', 'nome', 'email');
+  return await knex('users')
+    .select('id', 'nome', 'email')
+    .where('id', id)
+    .first();
 };
 
 module.exports = {

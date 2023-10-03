@@ -33,13 +33,14 @@ const executeUserDetail = async (id) => {
   if (!userLogged) {
     throw new AppError('User not found.', 404);
   }
-  return userLogged[0];
+  delete userLogged.senha;
+  return userLogged;
 };
 
 const executeLogin = async (email, senha) => {
   const userExists = await findByEmail(email);
   if (!userExists) {
-    throw new AppError('Invalid email and/or password', 401);
+    throw new AppError('Invalid email and/or password.', 401);
   }
   const passwordMatch = await bcrypt.compare(senha, userExists.senha);
   if (!passwordMatch) {
