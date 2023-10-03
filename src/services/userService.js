@@ -20,7 +20,7 @@ const executeCreate = async (nome, email, senha) => {
 };
 
 const executeUpdate = async (id, nome, email, senha) => {
-  const checkEmailExists = await findByEmailAndDifferentId(email);
+  const checkEmailExists = await findByEmailAndDifferentId(email, id);
   if (checkEmailExists) {
     throw new AppError('Email already exists.', 400);
   }
@@ -33,8 +33,7 @@ const executeUserDetail = async (id) => {
   if (!userLogged) {
     throw new AppError('User not found.', 404);
   }
-  delete userLogged.senha;
-  return userLogged;
+  return userLogged[0];
 };
 
 const executeLogin = async (email, senha) => {
