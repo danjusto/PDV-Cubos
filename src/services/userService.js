@@ -33,7 +33,6 @@ const executeUserDetail = async (id) => {
   if (!userLogged) {
     throw new AppError('User not found.', 404);
   }
-  delete userLogged.senha;
   return userLogged;
 };
 
@@ -44,7 +43,7 @@ const executeLogin = async (email, senha) => {
   }
   const passwordMatch = await bcrypt.compare(senha, userExists.senha);
   if (!passwordMatch) {
-    throw new AppError('Invalid email and/or password', 401);
+    throw new AppError('Invalid email and/or password.', 401);
   }
   return generateToken(userExists.id);
 };
