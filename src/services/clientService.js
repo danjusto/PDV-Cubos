@@ -1,12 +1,39 @@
 const AppError = require('../errors/AppError');
-const { findClients } = require('../repositories/clientRepository');
+const {
+  findClients,
+  findClientByid,
+} = require('../repositories/clientRepository');
 
 const executeListClients = async () => {
   const userClients = await findClients();
-  if (!userClients) {
-    throw new AppError('Clients not found.', 404);
-  }
-  return userClients[0];
+  const filteredClients = userClients.map((client) => {
+    const editedClient = {};
+
+    for (const key in client) {
+      if (client[key] !== null) {
+        editedClient[key] = client[key];
+      }
+    }
+    return editedClient;
+  });
+
+  return filteredClients;
 };
 
-module.exports = { executeListClients };
+const executeDetailClient = async (id) => {
+  const client = await findClientByid(id);
+  if (!client) {
+    throw new AppError('Client not found.', 404);
+  }
+
+  const editedClient = {};
+
+  for (const key in client) {
+    if (client[key] !== null) {
+      editedClient[key] = client[key];
+    }
+  }
+  return editedClient;
+};
+
+module.exports = { executeListClients, executeDetailClient };
