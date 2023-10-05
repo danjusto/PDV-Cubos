@@ -3,18 +3,12 @@ const {
   findClients,
   findClientByid,
 } = require('../repositories/clientRepository');
+const filterNullProps = require('../utils/filterClientNulls');
 
 const executeListClients = async () => {
   const userClients = await findClients();
   const filteredClients = userClients.map((client) => {
-    const editedClient = {};
-
-    for (const key in client) {
-      if (client[key] !== null) {
-        editedClient[key] = client[key];
-      }
-    }
-    return editedClient;
+    return filterNullProps(client);
   });
 
   return filteredClients;
@@ -26,14 +20,7 @@ const executeDetailClient = async (id) => {
     throw new AppError('Client not found.', 404);
   }
 
-  const editedClient = {};
-
-  for (const key in client) {
-    if (client[key] !== null) {
-      editedClient[key] = client[key];
-    }
-  }
-  return editedClient;
+  return filterNullProps(client);
 };
 
 module.exports = { executeListClients, executeDetailClient };
