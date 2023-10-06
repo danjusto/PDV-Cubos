@@ -4,7 +4,6 @@ const {
 } = require('../src/services/clientService');
 const clientRepository = require('../src/repositories/clientRepository');
 const AppError = require('../src/errors/AppError');
-const { client } = require('../src/schemas/client');
 
 jest.mock('../src/repositories/clientRepository');
 
