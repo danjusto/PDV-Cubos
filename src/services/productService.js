@@ -4,15 +4,23 @@ const {
   findProducts,
   findProductsByCategory,
   findProductByid,
-  removeProduct
+  removeProduct,
+  updateProduct,
+  findProductByDescription,
+  findProductByDescriptionAndDifferentId
 } = require('../repositories/productRepository');
-const { findById } = require("../repositories/categoryRepository");
+const categoryRepository = require("../repositories/categoryRepository");
 
 const executeCreate = async (descricao, quantidade_estoque, valor, categoria_id) => {
-  const checkCategories = await findById(categoria_id);
+  const checkCategories = await categoryRepository.findById(categoria_id);
 
   if (!checkCategories) {
     throw new AppError("Categorie not found.", 404);
+  };
+
+  const checkProductDescriptionExist = await findProductByDescription(descricao);
+  if (checkProductDescriptionExist) {
+    throw new AppError("Description already exist", 400);
   };
 
   const productCreated = await insertProduct(descricao, quantidade_estoque, valor, categoria_id);
@@ -34,12 +42,32 @@ const executeDetail = async (id) => {
   return product;
 };
 
-const executeRemove = async (id) => {
-    const product = await findProductByid(id);
-    if (!product) {
-      throw new AppError('Product not found.', 404);
-    }
-    removeProduct(id);
+const executeUpdate = async (id, descricao, quantidade_estoque, valor, categoria_id) => {
+  const product = await findProductByid(id)
+  if (!product) {
+    throw new AppError('Product not found.', 404);
   };
 
-module.exports = { executeCreate, executeList, executeDetail, executeRemove };
+  const checkCategory = await categoryRepository.findById(categoria_id);
+  if (!checkCategory) {
+    throw new AppError("Category not found.", 404);
+  };
+
+  const checkProductDescriptionExist = await findProductByDescriptionAndDifferentId(descricao, id);
+  if (checkProductDescriptionExist) {
+    throw new AppError("Description already exist", 400);
+  };
+
+  await updateProduct(id, descricao, quantidade_estoque, valor, categoria_id)
+
+}
+
+const executeRemove = async (id) => {
+  const product = await findProductByid(id);
+  if (!product) {
+    throw new AppError('Product not found.', 404);
+  }
+  removeProduct(id);
+};
+
+module.exports = { executeCreate, executeList, executeDetail, executeRemove, executeUpdate };

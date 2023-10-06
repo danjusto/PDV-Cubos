@@ -22,4 +22,18 @@ const removeProduct = async (id) => {
   return await knex('products').where('id', id).del();
 };
 
-module.exports = { insertProduct, findProducts, findProductByid, removeProduct, findProductsByCategory };
+const updateProduct = async (id, descricao, quantidade_estoque, valor, categoria_id) => {
+  return await knex('products')
+    .where('id', id)
+    .update({ descricao, quantidade_estoque, valor, categoria_id })
+};
+
+const findProductByDescription = async (descricao) => {
+  return await knex('products').whereILike('descricao', descricao).first();
+}
+
+const findProductByDescriptionAndDifferentId = async (descricao, id) => {
+  return await knex('products').whereILike('descricao', descricao).andWhere('id', '!=', id).first();
+}
+
+module.exports = { insertProduct, findProducts, findProductByid, removeProduct, findProductsByCategory, updateProduct, findProductByDescription, findProductByDescriptionAndDifferentId };
