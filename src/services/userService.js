@@ -1,5 +1,11 @@
 const bcrypt = require('bcrypt');
-const { findByEmail, findByEmailAndDifferentId, insertUser, updateUser, getUserById } = require('../repositories/userRepository');
+const {
+  findByEmail,
+  findByEmailAndDifferentId,
+  insertUser,
+  updateUser,
+  getUserById,
+} = require('../repositories/userRepository');
 const AppError = require('../errors/AppError');
 const { generateToken } = require('../utils/auth');
 
@@ -28,7 +34,7 @@ const executeUserDetail = async (id) => {
     throw new AppError('User not found.', 404);
   }
   return userLogged;
-}
+};
 
 const executeLogin = async (email, senha) => {
   const userExists = await findByEmail(email);
@@ -37,9 +43,14 @@ const executeLogin = async (email, senha) => {
   }
   const passwordMatch = await bcrypt.compare(senha, userExists.senha);
   if (!passwordMatch) {
-    throw new AppError('Invalid email and/or password.', 401)
+    throw new AppError('Invalid email and/or password.', 401);
   }
   return generateToken(userExists.id);
-}
+};
 
-module.exports = { executeCreate, executeUpdate, executeUserDetail, executeLogin };
+module.exports = {
+  executeCreate,
+  executeUpdate,
+  executeUserDetail,
+  executeLogin,
+};

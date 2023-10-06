@@ -1,9 +1,7 @@
 const knex = require('../database/connection');
 
 const findByEmail = async (email) => {
-  return await knex('users')
-    .where('email', email)
-    .first();
+  return await knex('users').where('email', email).first();
 };
 
 const findByEmailAndDifferentId = async (email, id) => {

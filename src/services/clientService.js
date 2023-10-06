@@ -1,5 +1,6 @@
 const { findByEmailOrCPF, getClientById, findByEmailAndDifferentId, findByCpfAndDifferentId } = require('../repositories/clientRepository.js')
-const { insertClient, updateClient } = require('../repositories/clientRepository.js')
+const { insertClient, updateClient, findClients, findClientByid } = require('../repositories/clientRepository.js')
+const filterNullProps = require('../utils/filterClientNulls');
 const AppError = require('../errors/AppError');
 
 const executeCreate = async (nome, email, cpf, cep, rua, numero, bairro, cidade, estado) => {
@@ -32,8 +33,27 @@ const executeUpdate = async (id, nome, email, cpf, cep, rua, numero, bairro, cid
   return clientUpdated[0];
 };
 
+const executeListClients = async () => {
+  const userClients = await findClients();
+  const filteredClients = userClients.map((client) => {
+    return filterNullProps(client);
+  });
+
+  return filteredClients;
+};
+
+const executeDetailClient = async (id) => {
+  const client = await findClientByid(id);
+  if (!client) {
+    throw new AppError('Client not found.', 404);
+  }
+
+  return filterNullProps(client);
+};
 
 module.exports = {
   executeCreate,
-  executeUpdate
+  executeUpdate,
+  executeListClients,
+  executeDetailClient
 };

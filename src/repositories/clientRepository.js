@@ -40,11 +40,21 @@ const updateClient = async (id, nome, email, cpf, cep, rua, numero, bairro, cida
     .returning(['id', 'nome', 'email', 'cpf', 'cep', 'rua', 'numero', 'bairro', 'cidade', 'estado']);
 };
 
+const findClients = async () => {
+  return await knex('clients').select('*');
+};
+
+const findClientByid = async (id) => {
+  return await knex('clients').where('id', id).first();
+};
+
 module.exports = {
   findByEmailOrCPF,
-  insertClient,
   getClientById,
+  insertClient,  
   findByEmailAndDifferentId,
   findByCpfAndDifferentId,
-  updateClient
+  updateClient,
+  findClients,
+  findClientByid
  };
