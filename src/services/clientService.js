@@ -1,4 +1,4 @@
-const { findByEmailOrCPF, getClientById } = require('../repositories/clientRepository.js')
+const { findByEmailOrCPF, getClientById, findByEmailAndDifferentId, findByCpfAndDifferentId } = require('../repositories/clientRepository.js')
 const { insertClient, updateClient } = require('../repositories/clientRepository.js')
 const AppError = require('../errors/AppError');
 
@@ -18,13 +18,22 @@ const executeUpdate = async (id, nome, email, cpf, cep, rua, numero, bairro, cid
   if (!clientById) {
     throw new AppError('Client not found.', 404);
   };
+  const checkEmailAndDifferentId = await findByEmailAndDifferentId(email, id);
+  if (checkEmailAndDifferentId) {
+    throw new AppError('Email already exists.', 400);
+  }
 
+  const checkCpfAndDifferentId = await findByCpfAndDifferentId(cpf, id);
+  if (checkCpfAndDifferentId) {
+    throw new AppError('CPF already exists.', 400);
+  }
 
   const clientUpdated = await updateClient(id, nome, email, cpf, cep, rua, numero, bairro, cidade, estado);
+  return clientUpdated[0];
 };
 
 
 module.exports = {
   executeCreate,
-  executeUpdate,
+  executeUpdate
 };
