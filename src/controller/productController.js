@@ -18,7 +18,8 @@ const createProduct = async (req, res) => {
     }
     return res.status(500).json({ message: 'Server error.' });
   }
-    
+};
+  
 const listProducts = async (req, res) => {
   const { categoria_id } = req.query;
   try {
