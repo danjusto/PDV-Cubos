@@ -18,8 +18,8 @@ const updateClient = async (req, res) => {
   const { nome, email, cpf } = req.body;
   const { cep, rua, numero, bairro, cidade, estado } = req.body;
   try {
-    const updateClient = await executeUpdate(id, nome, email, cpf, cep, rua, numero, bairro, cidade, estado);
-    return res.status(201).json(updateClient);
+    await executeUpdate(id, nome, email, cpf, cep, rua, numero, bairro, cidade, estado);
+    return res.status(204).json();
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });
