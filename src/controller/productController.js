@@ -6,8 +6,9 @@ const {
 } = require('../services/productService');
 
 const listProducts = async (req, res) => {
+  const { categoria_id } = req.query;
   try {
-    const products = await executeList();
+    const products = await executeList(categoria_id);
     return res.status(200).json(products);
   } catch (error) {
     return res.status(500).json({ message: 'Server error.' });
