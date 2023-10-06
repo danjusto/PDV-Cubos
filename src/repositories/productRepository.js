@@ -12,8 +12,14 @@ const findProductByid = async (id) => {
   return await knex('products').where('id', id).first();
 };
 
+const insertProduct = async (descricao, quantidade_estoque, valor, categoria_id) => {
+  return await knex('products')
+    .insert({ descricao, quantidade_estoque, valor, categoria_id })
+    .returning(['descricao', 'quantidade_estoque', 'valor', 'categoria_id']);
+};
+
 const removeProduct = async (id) => {
   return await knex('products').where('id', id).del();
 };
 
-module.exports = { findProducts, findProductByid, removeProduct, findProductsByCategory };
+module.exports = { insertProduct, findProducts, findProductByid, removeProduct, findProductsByCategory };
