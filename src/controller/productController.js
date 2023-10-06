@@ -1,0 +1,43 @@
+const AppError = require('../errors/AppError');
+const {
+  executeList,
+  executeDetail,
+  executeRemove
+} = require('../services/productService');
+
+const listProducts = async (req, res) => {
+  try {
+    const products = await executeList();
+    return res.status(200).json(products);
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error.' });
+  }
+};
+
+const detailProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const productData = await executeDetail(id);
+    return res.status(200).json(productData);
+  } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
+    return res.status(500).json({ message: 'Server error.' });
+  }
+};
+
+const removeProduct = async (req, res) => {
+    const { id } = req.params;
+    try {
+      await executeRemove(id);
+      return res.status(204).json();
+    } catch (error) {
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).json({ message: error.message });
+      }
+      return res.status(500).json({ message: 'Server error.' });
+    }
+  };
+
+module.exports = { listProducts, detailProduct, removeProduct };
