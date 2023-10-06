@@ -4,4 +4,8 @@ const findAll = async () => {
   return await knex('categories');
 }
 
-module.exports = { findAll }
+const findById = async (id) => {
+  return await knex('categories').where('id', id).first();
+}
+
+module.exports = { findAll, findById }
