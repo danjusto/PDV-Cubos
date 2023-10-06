@@ -7,4 +7,4 @@ const validateUserBody = (schema) => async (req, res, next) => {
     }
 }
 
-module.exports = validateUserBody
+module.exports = validateUserBody;
