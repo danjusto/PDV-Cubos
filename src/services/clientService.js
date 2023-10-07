@@ -8,7 +8,7 @@ const executeCreate = async (nome, email, cpf, cep, rua, numero, bairro, cidade,
     throw new AppError('Client already exists.', 400);
   }
   const createdClient = await insert(nome, email, cpf, cep, rua, numero, bairro, cidade, estado);
-  return createdClient[0];
+  return filterNullProps(createdClient[0]);
 };
 
 const executeUpdate = async (id, nome, email, cpf, cep, rua, numero, bairro, cidade, estado) => {
