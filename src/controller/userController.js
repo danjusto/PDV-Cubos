@@ -1,10 +1,5 @@
 const AppError = require('../errors/AppError');
-const {
-  executeCreate,
-  executeUpdate,
-  executeLogin,
-  executeUserDetail,
-} = require('../services/userService');
+const { executeCreate, executeUpdate, executeLogin, executeDetail } = require('../services/userService');
 
 const createUser = async (req, res) => {
   const { nome, email, senha } = req.body;
@@ -36,7 +31,7 @@ const updateUser = async (req, res) => {
 const detailUser = async (req, res) => {
   const id = req.userId;
   try {
-    const loggedUser = await executeUserDetail(id);
+    const loggedUser = await executeDetail(id);
     return res.status(200).json(loggedUser);
   } catch (error) {
     if (error instanceof AppError) {

@@ -2,8 +2,7 @@ const { executeCreate, executeUpdate, executeList, executeDetail } = require('..
 const AppError = require('../errors/AppError');
 
 const createClient = async (req, res) => {
-  const { nome, email, cpf } = req.body;
-  const { cep, rua, numero, bairro, cidade, estado } = req.body;
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
   try {
     const createdClient = await executeCreate(nome, email, cpf, cep, rua, numero, bairro, cidade, estado);
     return res.status(201).json(createdClient);
@@ -17,12 +16,11 @@ const createClient = async (req, res) => {
 
 const updateClient = async (req, res) => {
   const { id } = req.params;
-  const { nome, email, cpf } = req.body;
-  const { cep, rua, numero, bairro, cidade, estado } = req.body;
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
   try {
     await executeUpdate(id, nome, email, cpf, cep, rua, numero, bairro, cidade, estado);
     return res.status(204).json();
-     } catch (error) {
+  } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });
     }
@@ -39,12 +37,12 @@ const listClients = async (req, res) => {
   }
 };
 
-const clientDetail = async (req, res) => {
+const detailClient = async (req, res) => {
   const { id } = req.params;
   try {
     const clientData = await executeDetail(id);
     return res.status(200).json(clientData);
-     } catch (error) {
+  } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });
     }
@@ -52,9 +50,4 @@ const clientDetail = async (req, res) => {
   }
 };
 
-module.exports = {
-  createClient,
-  updateClient,
-  listClients,
-  clientDetail
- };
+module.exports = { createClient, updateClient, listClients, detailClient };

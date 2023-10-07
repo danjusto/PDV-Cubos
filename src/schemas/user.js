@@ -1,9 +1,10 @@
-const Joi = require('joi')
+const Joi = require('joi');
 
 const user = Joi.object({
   nome: Joi.string().required().messages({
     'any.required': 'The field nome is required',
     'string.base': 'The field nome must be a text',
+    'string.empty': 'The field nome cannot be empty',
   }),
   email: Joi.string().email().required().messages({
     'any.required': 'The field email is required',
@@ -15,7 +16,7 @@ const user = Joi.object({
     'string.base': 'The password must contain valid characters',
     'string.min': 'The password must at least 6 characters',
   }),
-})
+});
 
 const loginUser = Joi.object({
   email: Joi.string().email().required().messages({
@@ -28,6 +29,6 @@ const loginUser = Joi.object({
     'string.base': 'The password must contain valid characters',
     'string.min': 'The password must at least 6 characters',
   }),
-})
+});
 
-module.exports = { user, loginUser }
+module.exports = { user, loginUser };

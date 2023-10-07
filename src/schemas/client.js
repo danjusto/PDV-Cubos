@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('joi');
 
 const client = Joi.object({
   nome: Joi.string().required().messages({
@@ -12,27 +12,32 @@ const client = Joi.object({
     'string.empty': 'The field email cannot be empty',
     'string.email': 'Invalid email',
   }),
-  cpf: Joi.string().required().pattern(/^[0-9]+$/).messages({
-    'any.required': 'The field cpf is required',
-    'string.empty': 'The field cpf cannot be empty',
-    'string.pattern.base': 'The field cpf must be a number',
-  }),
-  cep: Joi.string().pattern(/^[0-9]+$/).messages({
-    'string.base': 'The field cep must be a text',
-    'string.pattern.base': 'The field cep must be a number',
-    'string.empty': 'The field cep cannot be empty',
-  }),
+  cpf: Joi.string()
+    .required()
+    .pattern(/^[0-9]+$/)
+    .messages({
+      'any.required': 'The field cpf is required',
+      'string.empty': 'The field cpf cannot be empty',
+      'string.pattern.base': 'The field cpf must be a number',
+    }),
+  cep: Joi.string()
+    .pattern(/^[0-9]+$/)
+    .messages({
+      'string.base': 'The field cep must be a text',
+      'string.pattern.base': 'The field cep must be a number',
+      'string.empty': 'The field cep cannot be empty',
+    }),
   rua: Joi.string().messages({
     'string.base': 'The field rua must be a text',
     'string.empty': 'The field rua cannot be empty',
   }),
   numero: Joi.string().messages({
     'string.base': 'The field numero must be a text',
-    'string.empty': 'The field numerocannot be empty',
+    'string.empty': 'The field numero cannot be empty',
   }),
   bairro: Joi.string().messages({
     'string.base': 'The field bairro must be a text',
-    'string.empty': 'The field bairrocannot be empty',
+    'string.empty': 'The field bairro cannot be empty',
   }),
   cidade: Joi.string().messages({
     'string.base': 'The field cidade must be a text',
@@ -41,7 +46,7 @@ const client = Joi.object({
   estado: Joi.string().messages({
     'string.base': 'The field estado must be a text',
     'string.empty': 'The field estado cannot be empty',
-  })
+  }),
 });
 
-module.exports = { client }
+module.exports = client;
