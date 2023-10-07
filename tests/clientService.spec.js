@@ -1,13 +1,15 @@
 const {
   executeCreate,
   executeUpdate,
+  executeDetail,
+  executeList
 } = require('../src/services/clientService');
 const clientRepository = require('../src/repositories/clientRepository');
 const AppError = require('../src/errors/AppError');
 
 jest.mock('../src/repositories/clientRepository');
 
-describe('Client Service - executeCreate', () => {
+describe('Client Service - ExecuteCreate', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -118,7 +120,7 @@ describe('Client Service - executeCreate', () => {
   });
 });
 
-describe('Client Service - executeUpdate', () => {
+describe('Client Service - ExecuteUpdate', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -316,4 +318,91 @@ describe('Client Service - executeUpdate', () => {
     }
   });
 
+});
+
+describe("Client Service - ExecuteDetail", () => {
+  
+  afterEach(() => {
+    jest.restoreAllMocks();
+  })
+  
+  const clientData = {
+    id: 1,
+    nome: 'Ney',
+    email: 'ney@email.com',
+    cpf: '01234567890',
+    cep: undefined,
+    rua: undefined,
+    numero: undefined,
+    bairro: undefined,
+    cidade: undefined,
+    estado: undefined,
+  };
+  
+  test("Success detail client", async() => {
+    clientRepository.findClientByid.mockReturnValue(clientData);
+      
+    const response = await executeDetail(clientData.id);
+  
+    expect(clientRepository.findClientByid).toHaveBeenCalledTimes(1);
+    expect(clientRepository.findClientByid).toHaveBeenCalledWith(clientData.id);
+    expect(response).toHaveProperty('id');
+    expect(response).toHaveProperty('cpf');
+  });
+  
+  test("Throw an exception because product not exists", async() => {
+    clientRepository.findClientByid.mockReturnValue(undefined);
+      
+    try {
+      await executeDetail(clientData.id);
+    } catch (error) {
+      expect(clientRepository.findClientByid).toHaveBeenCalledTimes(1);
+      expect(error).toBeInstanceOf(AppError);
+      expect(error).toHaveProperty("statusCode", 404);
+      expect(error).toHaveProperty("message", "Client not found.");
+    }
+  });
+});
+
+describe("Client Service - ExecuteList", () => {
+  
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+    
+  const listClientsData = [
+    {
+      id: 1,
+      nome: 'Ney',
+      email: 'ney@email.com',
+      cpf: '01234567890',
+      cep: undefined,
+      rua: undefined,
+      numero: undefined,
+      bairro: undefined,
+      cidade: undefined,
+      estado: undefined,
+    },
+    {
+      id: 2,
+      nome: 'Rick',
+      email: 'rick@email.com',
+      cpf: '12345678910',
+      cep: undefined,
+      rua: undefined,
+      numero: undefined,
+      bairro: undefined,
+      cidade: undefined,
+      estado: undefined,
+    }
+  ];
+    
+  test("Success list clients", async() => {
+    clientRepository.findClients.mockReturnValue(listClientsData);
+        
+    const response = await executeList(undefined);
+    
+    expect(clientRepository.findClients).toHaveBeenCalledTimes(1);
+    expect(response).toHaveLength(2);
+  });
 });

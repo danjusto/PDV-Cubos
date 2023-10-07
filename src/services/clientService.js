@@ -33,7 +33,7 @@ const executeUpdate = async (id, nome, email, cpf, cep, rua, numero, bairro, cid
   return clientUpdated[0];
 };
 
-const executeListClients = async () => {
+const executeList = async () => {
   const userClients = await findClients();
   const filteredClients = userClients.map((client) => {
     return filterNullProps(client);
@@ -42,7 +42,7 @@ const executeListClients = async () => {
   return filteredClients;
 };
 
-const executeDetailClient = async (id) => {
+const executeDetail = async (id) => {
   const client = await findClientByid(id);
   if (!client) {
     throw new AppError('Client not found.', 404);
@@ -54,6 +54,6 @@ const executeDetailClient = async (id) => {
 module.exports = {
   executeCreate,
   executeUpdate,
-  executeListClients,
-  executeDetailClient
+  executeList,
+  executeDetail
 };
