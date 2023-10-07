@@ -1,4 +1,4 @@
-const { executeCreate, executeUpdate, executeListClients, executeDetailClient } = require('../services/clientService.js');
+const { executeCreate, executeUpdate, executeList, executeDetail } = require('../services/clientService.js');
 const AppError = require('../errors/AppError');
 
 const createClient = async (req, res) => {
@@ -32,7 +32,7 @@ const updateClient = async (req, res) => {
 
 const listClients = async (req, res) => {
   try {
-    const clients = await executeListClients();
+    const clients = await executeList();
     return res.status(200).json(clients);
   } catch (error) {
     return res.status(500).json({ message: 'Server error.' });
@@ -42,7 +42,7 @@ const listClients = async (req, res) => {
 const clientDetail = async (req, res) => {
   const { id } = req.params;
   try {
-    const clientData = await executeDetailClient(id);
+    const clientData = await executeDetail(id);
     return res.status(200).json(clientData);
      } catch (error) {
     if (error instanceof AppError) {
