@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('joi');
 
 const product = Joi.object({
   descricao: Joi.string().required().messages({
@@ -24,6 +24,6 @@ const product = Joi.object({
     'number.integer': 'The number must be a integer',
     'number.positive': 'The number must be positive',
   }),
-})
+});
 
-module.exports = product
+module.exports = product;
