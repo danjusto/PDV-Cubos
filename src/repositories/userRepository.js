@@ -1,42 +1,23 @@
 const knex = require('../database/connection');
 
 const findByEmail = async (email) => {
-  return await knex('users')
-    .where('email', email)
-    .first();
+  return await knex('users').where('email', email).first();
 };
 
 const findByEmailAndDifferentId = async (email, id) => {
-  return await knex('users')
-    .where('email', email)
-    .andWhere('id', '!=', id)
-    .first();
+  return await knex('users').where('email', email).andWhere('id', '!=', id).first();
 };
 
-const insertUser = async (nome, email, senha) => {
-  return await knex('users')
-    .insert({ nome, email, senha })
-    .returning(['id', 'nome', 'email']);
+const insert = async (nome, email, senha) => {
+  return await knex('users').insert({ nome, email, senha }).returning(['id', 'nome', 'email']);
 };
 
-const updateUser = async (id, nome, email, senha) => {
-  return await knex('users')
-    .where('id', id)
-    .update({ nome, email, senha })
-    .returning(['id', 'nome', 'email']);
+const update = async (id, nome, email, senha) => {
+  return await knex('users').where('id', id).update({ nome, email, senha });
 };
 
-const getUserById = async (id) => {
-  return await knex('users')
-    .select('id', 'nome', 'email')
-    .where('id', id)
-    .first();
+const findById = async (id) => {
+  return await knex('users').select('id', 'nome', 'email').where('id', id).first();
 };
 
-module.exports = {
-  findByEmail,
-  findByEmailAndDifferentId,
-  insertUser,
-  getUserById,
-  updateUser,
-};
+module.exports = { findByEmail, findByEmailAndDifferentId, insert, findById, update };

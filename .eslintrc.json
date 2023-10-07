@@ -13,5 +13,7 @@
     "parserOptions": {
         "ecmaVersion": "latest"
     },
-    "rules": {}
+    "rules": {
+      "no-console": "warn"
+    }
 }

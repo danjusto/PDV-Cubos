@@ -1,5 +1,5 @@
 const AppError = require('../errors/AppError');
-const { executeCreate, executeUpdate, executeLogin, executeUserDetail } = require('../services/userService');
+const { executeCreate, executeUpdate, executeLogin, executeDetail } = require('../services/userService');
 
 const createUser = async (req, res) => {
   const { nome, email, senha } = req.body;
@@ -31,7 +31,7 @@ const updateUser = async (req, res) => {
 const detailUser = async (req, res) => {
   const id = req.userId;
   try {
-    const loggedUser = await executeUserDetail(id);
+    const loggedUser = await executeDetail(id);
     return res.status(200).json(loggedUser);
   } catch (error) {
     if (error instanceof AppError) {
@@ -39,7 +39,7 @@ const detailUser = async (req, res) => {
     }
     return res.status(500).json({ message: 'Server error.' });
   }
-}
+};
 
 const loginUser = async (req, res) => {
   const { email, senha } = req.body;
@@ -50,7 +50,7 @@ const loginUser = async (req, res) => {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });
     }
-    return res.status(500).json({ message: "Server error." });
+    return res.status(500).json({ message: 'Server error.' });
   }
 };
 
