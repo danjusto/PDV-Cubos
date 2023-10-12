@@ -16,16 +16,16 @@ const findByIdAndInexistingOrder = async (id) => {
   return await knex('products').join('orders', 'products.id', 'order_products.produto_id').select('products.id', 'products.produto_imagem').where('products.id', id).first();
 };
 
-const insert = async (descricao, quantidade_estoque, valor, categoria_id) => {
-  return await knex('products').insert({ descricao, quantidade_estoque, valor, categoria_id }).returning(['id', 'descricao', 'quantidade_estoque', 'valor', 'categoria_id']);
+const insert = async (descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
+  return await knex('products').insert({ descricao, quantidade_estoque, valor, categoria_id, produto_imagem }).returning(['*']);
 };
 
 const remove = async (id) => {
   return await knex('products').where('id', id).del();
 };
 
-const update = async (id, descricao, quantidade_estoque, valor, categoria_id) => {
-  return await knex('products').where('id', id).update({ descricao, quantidade_estoque, valor, categoria_id });
+const update = async (id, descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
+  return await knex('products').where('id', id).update({ descricao, quantidade_estoque, valor, categoria_id, produto_imagem });
 };
 
 const findByDescription = async (descricao) => {
