@@ -2,7 +2,7 @@ const AppError = require('../errors/AppError');
 const { insert, findAll, findByCategory, findById, remove, update, findByDescription, findByDescriptionAndDifferentId } = require('../repositories/productRepository');
 const { findById: findCategoryById } = require('../repositories/categoryRepository');
 
-const executeCreate = async (descricao, quantidade_estoque, valor, categoria_id) => {
+const executeCreate = async (descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
   const checkCategories = await findCategoryById(categoria_id);
   if (!checkCategories) {
     throw new AppError('Category not found.', 404);
@@ -11,7 +11,8 @@ const executeCreate = async (descricao, quantidade_estoque, valor, categoria_id)
   if (checkProductDescriptionExist) {
     throw new AppError('Description already exists.', 400);
   }
-  const createdProduct = await insert(descricao, quantidade_estoque, valor, categoria_id);
+
+  const createdProduct = await insert(descricao, quantidade_estoque, valor, categoria_id, produto_imagem);
   return createdProduct[0];
 };
 
@@ -30,7 +31,7 @@ const executeDetail = async (id) => {
   return product;
 };
 
-const executeUpdate = async (id, descricao, quantidade_estoque, valor, categoria_id) => {
+const executeUpdate = async (id, descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
   const product = await findById(id);
   if (!product) {
     throw new AppError('Product not found.', 404);
@@ -43,7 +44,7 @@ const executeUpdate = async (id, descricao, quantidade_estoque, valor, categoria
   if (checkProductDescriptionExist) {
     throw new AppError('Description already exists.', 400);
   }
-  await update(id, descricao, quantidade_estoque, valor, categoria_id);
+  await update(id, descricao, quantidade_estoque, valor, categoria_id, produto_imagem);
 };
 
 const executeRemove = async (id) => {

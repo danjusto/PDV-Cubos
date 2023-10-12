@@ -1,10 +1,13 @@
 const AppError = require('../errors/AppError');
 const { executeCreate, executeList, executeDetail, executeRemove, executeUpdate } = require('../services/productService');
+const fileCheck = require('../utils/checkFile');
 
 const createProduct = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+  const file = req.file;
   try {
-    const createProduct = await executeCreate(descricao, quantidade_estoque, valor, categoria_id);
+    const produto_imagem = await fileCheck(file, descricao);
+    const createProduct = await executeCreate(descricao, quantidade_estoque, valor, categoria_id, produto_imagem);
     return res.status(201).json(createProduct);
   } catch (error) {
     if (error instanceof AppError) {
@@ -40,13 +43,17 @@ const detailProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   const { id } = req.params;
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+  const file = req.file;
   try {
-    await executeUpdate(id, descricao, quantidade_estoque, valor, categoria_id);
+    const produto_imagem = await fileCheck(file, descricao);
+
+    await executeUpdate(id, descricao, quantidade_estoque, valor, categoria_id, produto_imagem);
     return res.status(204).json();
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });
     }
+
     return res.status(500).json({ message: 'Server error.' });
   }
 };
