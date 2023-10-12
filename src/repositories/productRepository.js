@@ -13,7 +13,7 @@ const findById = async (id) => {
 };
 
 const findByIdAndInexistingOrder = async (id) => {
-  return await knex('products').join('orders', 'products.id', 'order_products.produto_id').select('products.id', 'products.produto_imagem').where('products.id', id).first();
+  return await knex('products').join('order_products', 'products.id', 'order_products.produto_id').select('products.id').where('products.id', id).first();
 };
 
 const insert = async (descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
