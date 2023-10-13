@@ -13,6 +13,4 @@ routes.use('/login', loginRoutes);
 routes.use('/cliente', clientRoutes);
 routes.use('/produto', productRoutes);
 
-routes.use('/cliente', clientRoutes);
-
 module.exports = routes;
