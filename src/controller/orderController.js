@@ -7,6 +7,9 @@ const listOrders = async (req, res) => {
     if (!orders) throw new AppError('orders not found', 404);
     res.status(200).json(orders);
   } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
     return res.status(500).json({ message: 'Server error.' });
   }
 };
@@ -19,6 +22,9 @@ const detailOrder = async (req, res) => {
     if (!ordersClient) throw new AppError('orders not found', 404);
     res.status(200).json(ordersClient);
   } catch (error) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
     return res.status(500).json({ message: 'Server error.' });
   }
 };
