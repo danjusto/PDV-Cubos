@@ -7,15 +7,16 @@ const { createProduct, listProducts, detailProduct, removeProduct, updateProduct
 const productSchema = require('../schemas/product');
 const idParamSchema = require('../schemas/idParam');
 const idQueryParamSchema = require('../schemas/idQueryParam');
+const multer = require('../middlewares/multer');
 
 const routes = Router();
 
 routes.use(validateToken);
 
-routes.post('/', validateBody(productSchema), createProduct);
+routes.post('/', multer.single('file'), validateBody(productSchema), createProduct);
 routes.get('/', validateQueryParam(idQueryParamSchema), listProducts);
 routes.get('/:id', validateParam(idParamSchema), detailProduct);
-routes.put('/:id', validateParam(idParamSchema), validateBody(productSchema), updateProduct);
+routes.put('/:id', multer.single('file'), validateBody(productSchema), updateProduct);
 routes.delete('/:id', validateParam(idParamSchema), removeProduct);
 
 module.exports = routes;
