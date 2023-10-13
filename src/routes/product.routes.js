@@ -16,7 +16,7 @@ routes.use(validateToken);
 routes.post('/', multer.single('file'), validateBody(productSchema), createProduct);
 routes.get('/', validateQueryParam(idQueryParamSchema), listProducts);
 routes.get('/:id', validateParam(idParamSchema), detailProduct);
-routes.put('/:id', multer.single('file'), validateBody(productSchema), updateProduct);
+routes.put('/:id', validateParam(idParamSchema), multer.single('file'), validateBody(productSchema), updateProduct);
 routes.delete('/:id', validateParam(idParamSchema), removeProduct);
 
 module.exports = routes;
