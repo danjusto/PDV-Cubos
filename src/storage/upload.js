@@ -1,4 +1,5 @@
 const aws = require('aws-sdk');
+const AppError = require('../errors/AppError');
 const endpoint = new aws.Endpoint(process.env.ENDPOINT_S3);
 
 const s3 = new aws.S3({
@@ -24,5 +25,16 @@ const uploadFile = async (path, buffer, mimetype) => {
     path: file.Key,
   };
 };
-
-module.exports = { uploadFile };
+const deleteFile = async (path) => {
+  try {
+    await s3
+      .deleteObject({
+        Bucket: process.env.BACKBLAZE_BUCKET,
+        Key: path,
+      })
+      .promise();
+  } catch (error) {
+    throw new AppError('Delete image fail.', 500);
+  }
+};
+module.exports = { uploadFile, deleteFile };
