@@ -3,7 +3,7 @@ const sendEmail = require('../utils/sendEmail.js');
 const { findById: findByIdClient } = require('../repositories/clientRepository.js');
 const { findById: findByIdProduct, decrementStock } = require('../repositories/productRepository.js');
 const { insert: insertOrder, findAll: findAllOrders, findAllByClientId: findAllOrdersByClientId } = require('../repositories/orderRepository.js');
-const { insert: insertOrderProducts, findAll: findAllOrderProducts } = require('../repositories/orderProductsRepository');
+const { insert: insertOrderProducts, findAllByOrderId: findAllOrderProducts } = require('../repositories/orderProductsRepository');
 
 const executeCreate = async (cliente_id, observacao, produto_pedidos) => {
   const client = await findByIdClient(cliente_id);
@@ -15,10 +15,10 @@ const executeCreate = async (cliente_id, observacao, produto_pedidos) => {
   for (let item of produto_pedidos) {
     const product = await findByIdProduct(item.produto_id);
     if (!product) {
-      throw new AppError('Product not found', 404);
+      throw new AppError('Product not found.', 404);
     }
     if (item.quantidade_produto > product.quantidade_estoque) {
-      throw new AppError('Insufficient stock', 400);
+      throw new AppError('Insufficient stock.', 400);
     }
     totalValue += product.valor * item.quantidade_produto;
     products.push(product);
@@ -33,8 +33,8 @@ const executeCreate = async (cliente_id, observacao, produto_pedidos) => {
   }
   sendEmail(client.nome, client.email);
   return {
-    order: newOrder[0],
-    orderProducts: listOrderProducts,
+    pedido: newOrder[0],
+    pedido_produtos: listOrderProducts,
   };
 };
 
