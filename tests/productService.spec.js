@@ -1,41 +1,44 @@
 const { executeCreate, executeUpdate, executeDetail, executeList, executeRemove } = require('../src/services/productService');
 const productRepository = require('../src/repositories/productRepository');
 const categoryRepository = require('../src/repositories/categoryRepository');
+const { removeFile } = require('../src/utils/fileFunctions');
 const AppError = require('../src/errors/AppError');
 
 jest.mock('../src/repositories/productRepository');
 jest.mock('../src/repositories/categoryRepository');
+jest.mock('../src/utils/fileFunctions');
 
 describe('Product Service - ExecuteCreate', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
-
+  const file = undefined;
   const productData = {
     id: 1,
     descricao: 'Mouse',
     quantidade_estoque: 50,
     valor: 5000,
     categoria_id: 1,
+    produto_imagem: undefined,
   };
   const categoryData = {
     id: 1,
     descricao: 'Informática',
   };
 
-  test('Success create product', async () => {
+  test('Success create product without image', async () => {
     categoryRepository.findById.mockReturnValue(categoryData);
     productRepository.findByDescription.mockReturnValue(undefined);
     productRepository.insert.mockReturnValue([productData]);
 
-    const response = await executeCreate(productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
+    const response = await executeCreate(file, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
 
     expect(categoryRepository.findById).toHaveBeenCalledTimes(1);
     expect(categoryRepository.findById).toHaveBeenCalledWith(productData.categoria_id);
     expect(productRepository.findByDescription).toHaveBeenCalledTimes(1);
     expect(productRepository.findByDescription).toHaveBeenCalledWith(productData.descricao);
     expect(productRepository.insert).toHaveBeenCalledTimes(1);
-    expect(productRepository.insert).toHaveBeenCalledWith(productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
+    expect(productRepository.insert).toHaveBeenCalledWith(productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id, productData.produto_imagem);
     expect(response).toHaveProperty('descricao');
     expect(response).toHaveProperty('valor');
   });
@@ -44,7 +47,7 @@ describe('Product Service - ExecuteCreate', () => {
     categoryRepository.findById.mockReturnValue(undefined);
 
     try {
-      await executeCreate(productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
+      await executeCreate(file, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
     } catch (error) {
       expect(categoryRepository.findById).toHaveBeenCalledTimes(1);
       expect(error).toBeInstanceOf(AppError);
@@ -60,7 +63,7 @@ describe('Product Service - ExecuteCreate', () => {
     productRepository.findByDescription.mockReturnValue(productData);
 
     try {
-      await executeCreate(productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
+      await executeCreate(file, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
     } catch (error) {
       expect(categoryRepository.findById).toHaveBeenCalledTimes(1);
       expect(productRepository.findByDescription).toHaveBeenCalledTimes(1);
@@ -77,25 +80,27 @@ describe('Product Service - ExecuteUpdate', () => {
     jest.restoreAllMocks();
   });
 
+  const file = undefined;
   const productData = {
     id: 1,
     descricao: 'Mouse',
     quantidade_estoque: 50,
     valor: 5000,
     categoria_id: 1,
+    produto_imagem: 'imagem',
   };
   const categoryData = {
     id: 1,
     descricao: 'Informática',
   };
 
-  test('Success update product', async () => {
+  test('Success update product without new image', async () => {
     productRepository.findById.mockReturnValue(productData);
     categoryRepository.findById.mockReturnValue(categoryData);
     productRepository.findByDescriptionAndDifferentId.mockReturnValue(undefined);
     productRepository.update.mockReturnValue();
 
-    await executeUpdate(productData.id, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
+    await executeUpdate(productData.id, file, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
 
     expect(productRepository.findById).toHaveBeenCalledTimes(1);
     expect(productRepository.findById).toHaveBeenCalledWith(productData.id);
@@ -104,14 +109,14 @@ describe('Product Service - ExecuteUpdate', () => {
     expect(productRepository.findByDescriptionAndDifferentId).toHaveBeenCalledTimes(1);
     expect(productRepository.findByDescriptionAndDifferentId).toHaveBeenCalledWith(productData.descricao, productData.id);
     expect(productRepository.update).toHaveBeenCalledTimes(1);
-    expect(productRepository.update).toHaveBeenCalledWith(productData.id, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
+    expect(productRepository.update).toHaveBeenCalledWith(productData.id, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id, productData.produto_imagem);
   });
 
   test('Throw an exception because product not found', async () => {
     productRepository.findById.mockReturnValue(undefined);
 
     try {
-      await executeUpdate(productData.id, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
+      await executeUpdate(productData.id, file, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
     } catch (error) {
       expect(productRepository.findById).toHaveBeenCalledTimes(1);
       expect(error).toBeInstanceOf(AppError);
@@ -128,7 +133,7 @@ describe('Product Service - ExecuteUpdate', () => {
     categoryRepository.findById.mockReturnValue(undefined);
 
     try {
-      await executeUpdate(productData.id, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
+      await executeUpdate(productData.id, file, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
     } catch (error) {
       expect(productRepository.findById).toHaveBeenCalledTimes(1);
       expect(productRepository.findById).toHaveBeenCalledWith(productData.id);
@@ -147,7 +152,7 @@ describe('Product Service - ExecuteUpdate', () => {
     productRepository.findByDescriptionAndDifferentId.mockReturnValue(productData);
 
     try {
-      await executeUpdate(productData.id, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
+      await executeUpdate(productData.id, file, productData.descricao, productData.quantidade_estoque, productData.valor, productData.categoria_id);
     } catch (error) {
       expect(productRepository.findById).toHaveBeenCalledTimes(1);
       expect(productRepository.findById).toHaveBeenCalledWith(productData.id);
@@ -173,6 +178,7 @@ describe('Product Service - ExecuteDetail', () => {
     quantidade_estoque: 50,
     valor: 5000,
     categoria_id: 1,
+    produto_imagem: 'imagem',
   };
 
   test('Success detail product', async () => {
@@ -212,6 +218,7 @@ describe('Product Service - ExecuteList', () => {
       quantidade_estoque: 50,
       valor: 5000,
       categoria_id: 1,
+      produto_imagem: 'imagem',
     },
     {
       id: 2,
@@ -219,6 +226,7 @@ describe('Product Service - ExecuteList', () => {
       quantidade_estoque: 50,
       valor: 5000,
       categoria_id: 1,
+      produto_imagem: 'imagem',
     },
     {
       id: 3,
@@ -226,6 +234,7 @@ describe('Product Service - ExecuteList', () => {
       quantidade_estoque: 50,
       valor: 500000,
       categoria_id: 2,
+      produto_imagem: null,
     },
   ];
   const listProductFilterData = [
@@ -270,10 +279,12 @@ describe('Product Service - ExecuteRemove', () => {
     quantidade_estoque: 50,
     valor: 5000,
     categoria_id: 1,
+    produto_imagem: 'imagem',
   };
 
   test('Success remove product', async () => {
     productRepository.findById.mockReturnValue(productData);
+    removeFile.mockReturnValue(undefined);
     productRepository.remove.mockReturnValue(undefined);
 
     await executeRemove(productData.id);

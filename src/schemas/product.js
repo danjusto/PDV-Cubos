@@ -9,20 +9,20 @@ const product = Joi.object({
   quantidade_estoque: Joi.number().integer().positive().required().messages({
     'any.required': 'The field quantidade_estoque is required',
     'number.base': 'The value must be a number',
-    'number.integer': 'The number must be a integer',
-    'number.positive': 'The number must be positive',
+    'number.integer': 'The value must be a integer',
+    'number.positive': 'The value must be positive',
   }),
   valor: Joi.number().integer().positive().required().messages({
     'any.required': 'The field senha is required',
     'number.base': 'The value must be a number',
-    'number.integer': 'The number must be a integer',
-    'number.positive': 'The number must be positive',
+    'number.integer': 'The value must be a integer',
+    'number.positive': 'The value must be positive',
   }),
   categoria_id: Joi.number().integer().positive().required().messages({
     'any.required': 'The field senha is required',
     'number.base': 'The value must be a number',
-    'number.integer': 'The number must be a integer',
-    'number.positive': 'The number must be positive',
+    'number.integer': 'The value must be a integer',
+    'number.positive': 'The value must be positive',
   }),
 });
 

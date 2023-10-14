@@ -5,8 +5,8 @@ const createProduct = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
   const file = req.file;
   try {
-    const createProduct = await executeCreate(file, descricao, quantidade_estoque, valor, categoria_id);
-    return res.status(201).json(createProduct);
+    const createdProduct = await executeCreate(file, descricao, quantidade_estoque, valor, categoria_id);
+    return res.status(201).json(createdProduct);
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });
@@ -28,8 +28,8 @@ const listProducts = async (req, res) => {
 const detailProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    const productData = await executeDetail(id);
-    return res.status(200).json(productData);
+    const product = await executeDetail(id);
+    return res.status(200).json(product);
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });
