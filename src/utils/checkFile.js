@@ -1,4 +1,4 @@
-const { uploadFile } = require('../storage/upload');
+const { uploadFile } = require('../config/upload');
 
 const fileCheck = async (file, descricao) => {
   let image = null;

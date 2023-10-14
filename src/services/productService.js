@@ -1,7 +1,7 @@
 const AppError = require('../errors/AppError');
 const { insert, findAll, findByCategory, findById, remove, update, findByDescription, findByDescriptionAndDifferentId, findByIdAndInexistingOrder } = require('../repositories/productRepository');
 const { findById: findCategoryById } = require('../repositories/categoryRepository');
-const { deleteFile } = require('../storage/upload');
+const { deleteFile } = require('../config/upload');
 
 const executeCreate = async (descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
   const checkCategories = await findCategoryById(categoria_id);
