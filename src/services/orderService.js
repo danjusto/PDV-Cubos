@@ -32,7 +32,7 @@ const executeCreate = async (cliente_id, observacao, produto_pedidos) => {
     listOfProducts.push(orderProducts[0]);
   }
 
-  sendEmail(client.nome, client.email);
+  sendEmail(client.nome, client.email, newOrder[0].id, valor_total / 100);
 
   return {
     order: newOrder[0],

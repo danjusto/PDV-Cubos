@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmaçao de pedido</title>
+
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        border: 2px solid #ccc;
+    }
+    h1 {
+        text-align: center;
+    }
+    .receipt-details {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .receipt-details p {
+        margin: 0;
+    }
+    table {
+      background-color: #829142;
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .total {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    .footer {
+      background-color: #1d1e1fc0;
+      color: #f7faf5dc;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Confirmaçao de Pedido</h1>
+
+    <div class="receipt-details">
+        <p><strong>Nome do Cliente:</strong> {{clientName}}</p>
+        <p><strong>Número do Pedido:</strong> {{orderId}}</p>
+    </div>
+    <div class="total">
+        <p><strong>Total do Pedido:</strong> {{total}} Reais </p>
+    </div>
+</div>
+
+<div class="footer">
+  <p>Desenvolvido por &copy Neyvelopers 2023</p>
+</div>
+</body>
+</html>
