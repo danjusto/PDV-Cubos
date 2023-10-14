@@ -1,14 +1,13 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: "in-v3.mailjet.com",
+  host: 'smtp-relay.brevo.com',
   port: 587,
   secure: false,
   auth: {
-    user: "c5690a7de0297663283606af68512603",
-    pass: "bcc3918fce788fa969ce83055e887175",
+    user: 'testador.email.sender@gmail.com',
+    pass: 'xsmtpsib-e7f4381db87d6f533b691ad27c6ba21db576eba71be4577f67d4542c5fe9f00a-KGvOVd86CDzj49M3',
   },
 });
 
-
-module.exports = transporter
+module.exports = transporter;
