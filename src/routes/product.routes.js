@@ -3,20 +3,23 @@ const validateToken = require('../middlewares/validateToken');
 const validateParam = require('../middlewares/validateParam');
 const validateBody = require('../middlewares/validateBody');
 const validateQueryParam = require('../middlewares/validateQueryParam');
-const { createProduct, listProducts, detailProduct, removeProduct, updateProduct } = require('../controller/productController');
 const productSchema = require('../schemas/product');
 const idParamSchema = require('../schemas/idParam');
 const idQueryParamSchema = require('../schemas/idQueryParam');
-const multer = require('../middlewares/multer');
+const { createProduct, listProducts, detailProduct, removeProduct, updateProduct } = require('../controller/productController');
+const multer = require('multer');
 
 const routes = Router();
+const upload = multer({});
 
 routes.use(validateToken);
 
-routes.post('/', multer.single('file'), validateBody(productSchema), createProduct);
+routes.post('/', upload.single('file'), validateBody(productSchema), createProduct);
 routes.get('/', validateQueryParam(idQueryParamSchema), listProducts);
-routes.get('/:id', validateParam(idParamSchema), detailProduct);
-routes.put('/:id', validateParam(idParamSchema), multer.single('file'), validateBody(productSchema), updateProduct);
-routes.delete('/:id', validateParam(idParamSchema), removeProduct);
+
+routes.use(validateParam(idParamSchema));
+routes.put('/:id', upload.single('file'), validateBody(productSchema), updateProduct);
+routes.get('/:id', detailProduct);
+routes.delete('/:id', removeProduct);
 
 module.exports = routes;
