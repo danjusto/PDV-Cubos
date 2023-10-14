@@ -19,12 +19,9 @@ const uploadFile = async (path, buffer, mimetype) => {
       ContentType: mimetype,
     })
     .promise();
-
-  return {
-    url: file.Location,
-    path: file.Key,
-  };
+  return { url: file.Location, path: file.Key };
 };
+
 const deleteFile = async (path) => {
   try {
     await s3
@@ -37,4 +34,5 @@ const deleteFile = async (path) => {
     throw new AppError('Delete image fail.', 500);
   }
 };
+
 module.exports = { uploadFile, deleteFile };

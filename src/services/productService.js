@@ -1,9 +1,9 @@
 const AppError = require('../errors/AppError');
 const { insert, findAll, findByCategory, findById, remove, update, findByDescription, findByDescriptionAndDifferentId, findByIdAndInexistingOrder } = require('../repositories/productRepository');
 const { findById: findCategoryById } = require('../repositories/categoryRepository');
-const { deleteFile } = require('../config/upload');
+const { fileCheck, removeFile } = require('../utils/fileFunctions');
 
-const executeCreate = async (descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
+const executeCreate = async (file, descricao, quantidade_estoque, valor, categoria_id) => {
   const checkCategories = await findCategoryById(categoria_id);
   if (!checkCategories) {
     throw new AppError('Category not found.', 404);
@@ -12,7 +12,7 @@ const executeCreate = async (descricao, quantidade_estoque, valor, categoria_id,
   if (checkProductDescriptionExist) {
     throw new AppError('Description already exists.', 400);
   }
-
+  const produto_imagem = await fileCheck(file, descricao);
   const createdProduct = await insert(descricao, quantidade_estoque, valor, categoria_id, produto_imagem);
   return createdProduct[0];
 };
@@ -32,7 +32,7 @@ const executeDetail = async (id) => {
   return product;
 };
 
-const executeUpdate = async (id, descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
+const executeUpdate = async (id, file, descricao, quantidade_estoque, valor, categoria_id) => {
   const product = await findById(id);
   if (!product) {
     throw new AppError('Product not found.', 404);
@@ -45,6 +45,8 @@ const executeUpdate = async (id, descricao, quantidade_estoque, valor, categoria
   if (checkProductDescriptionExist) {
     throw new AppError('Description already exists.', 400);
   }
+  removeFile(product.produto_imagem);
+  const produto_imagem = await fileCheck(file, descricao);
   await update(id, descricao, quantidade_estoque, valor, categoria_id, produto_imagem);
 };
 
@@ -57,9 +59,7 @@ const executeRemove = async (id) => {
   if (checkInexistingOrder) {
     throw new AppError('This product is linked to an order.', 400);
   }
-  const pathImage = product.produto_imagem.replace(process.env.BUCKET_BASE_URL, '');
-  const preparedPathImage = pathImage.replace('%20', ' ');
-  deleteFile(preparedPathImage);
+  removeFile(product);
   remove(id);
 };
 
