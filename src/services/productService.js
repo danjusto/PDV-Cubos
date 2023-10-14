@@ -12,7 +12,10 @@ const executeCreate = async (file, descricao, quantidade_estoque, valor, categor
   if (checkProductDescriptionExist) {
     throw new AppError('Description already exists.', 400);
   }
-  const produto_imagem = await fileCheck(file, descricao);
+  let produto_imagem;
+  if (file) {
+    produto_imagem = await fileCheck(file, descricao);
+  }
   const createdProduct = await insert(descricao, quantidade_estoque, valor, categoria_id, produto_imagem);
   return createdProduct[0];
 };
@@ -45,8 +48,11 @@ const executeUpdate = async (id, file, descricao, quantidade_estoque, valor, cat
   if (checkProductDescriptionExist) {
     throw new AppError('Description already exists.', 400);
   }
-  removeFile(product.produto_imagem);
-  const produto_imagem = await fileCheck(file, descricao);
+  let produto_imagem = product.produto_imagem;
+  if (file) {
+    removeFile(produto_imagem);
+    produto_imagem = await fileCheck(file, descricao);
+  }
   await update(id, descricao, quantidade_estoque, valor, categoria_id, produto_imagem);
 };
 

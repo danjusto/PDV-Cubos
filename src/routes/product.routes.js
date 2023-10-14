@@ -18,6 +18,7 @@ routes.post('/', upload.single('file'), validateBody(productSchema), createProdu
 routes.get('/', validateQueryParam(categoriaIdQueryParam), listProducts);
 
 routes.use(validateParam(idParamSchema));
+
 routes.put('/:id', upload.single('file'), validateBody(productSchema), updateProduct);
 routes.get('/:id', detailProduct);
 routes.delete('/:id', removeProduct);

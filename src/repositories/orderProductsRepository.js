@@ -4,8 +4,8 @@ const insert = async (pedido_id, produto_id, quantidade_produto, valor_produto) 
   return await knex('order_products').insert({ pedido_id, produto_id, quantidade_produto, valor_produto }).returning('*');
 };
 
-const findAllOrderProducts = async (pedido_id) => {
+const findAll = async (pedido_id) => {
   return await knex('order_products').where('pedido_id', pedido_id);
 };
 
-module.exports = { insert, findAllOrderProducts };
+module.exports = { insert, findAll };
