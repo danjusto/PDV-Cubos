@@ -36,4 +36,8 @@ const findByDescriptionAndDifferentId = async (descricao, id) => {
   return await knex('products').whereILike('descricao', descricao).andWhere('id', '!=', id).first();
 };
 
-module.exports = { insert, findAll, findById, remove, findByCategory, update, findByDescription, findByDescriptionAndDifferentId, findByIdAndInexistingOrder };
+const decrementStock = async (id, quantidade_estoque) => {
+  return await knex('products').where('id', id).update({ quantidade_estoque });
+};
+
+module.exports = { insert, findAll, findById, remove, findByCategory, update, findByDescription, findByDescriptionAndDifferentId, findByIdAndInexistingOrder, decrementStock };

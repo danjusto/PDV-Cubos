@@ -23,23 +23,23 @@ const executeUpdate = async (id, nome, email, senha) => {
 };
 
 const executeDetail = async (id) => {
-  const userLogged = await findById(id);
-  if (!userLogged) {
+  const user = await findById(id);
+  if (!user) {
     throw new AppError('User not found.', 404);
   }
-  return userLogged;
+  return user;
 };
 
 const executeLogin = async (email, senha) => {
-  const userExists = await findByEmail(email);
-  if (!userExists) {
+  const user = await findByEmail(email);
+  if (!user) {
     throw new AppError('Invalid email and/or password.', 401);
   }
-  const passwordMatch = await bcrypt.compare(senha, userExists.senha);
+  const passwordMatch = await bcrypt.compare(senha, user.senha);
   if (!passwordMatch) {
     throw new AppError('Invalid email and/or password.', 401);
   }
-  return generateToken(userExists.id);
+  return generateToken(user.id);
 };
 
 module.exports = { executeCreate, executeUpdate, executeDetail, executeLogin };

@@ -40,8 +40,8 @@ const listClients = async (req, res) => {
 const detailClient = async (req, res) => {
   const { id } = req.params;
   try {
-    const clientData = await executeDetail(id);
-    return res.status(200).json(clientData);
+    const client = await executeDetail(id);
+    return res.status(200).json(client);
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });

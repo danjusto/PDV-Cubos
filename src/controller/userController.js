@@ -31,8 +31,8 @@ const updateUser = async (req, res) => {
 const detailUser = async (req, res) => {
   const id = req.userId;
   try {
-    const loggedUser = await executeDetail(id);
-    return res.status(200).json(loggedUser);
+    const user = await executeDetail(id);
+    return res.status(200).json(user);
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });

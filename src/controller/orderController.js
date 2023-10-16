@@ -4,8 +4,8 @@ const { executeList, executeCreate } = require('../services/orderService');
 const createOrder = async (req, res) => {
   const { cliente_id, observacao, pedido_produtos } = req.body;
   try {
-    const createOrder = await executeCreate(cliente_id, observacao, pedido_produtos);
-    return res.status(201).json(createOrder);
+    const createdOrder = await executeCreate(cliente_id, observacao, pedido_produtos);
+    return res.status(201).json(createdOrder);
   } catch (error) {
     if (error instanceof AppError) {
       return res.status(error.statusCode).json({ message: error.message });
