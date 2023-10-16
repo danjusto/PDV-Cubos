@@ -1,370 +1,973 @@
-# desafio-backend-05-pdv
-![](https://i.imgur.com/xG74tOh.png)
+# API PDV-Cubos
 
-# Desafio Módulo 5 - Backend
+API desenvolvida como desafio final do curso de desenvolvimento de software back-end da Cubos Academy. Trata-se de um sistema PDV (Ponto de Venda).
 
-Grupo 17: 
-Daniel M. Justo, Ney H. M. Ribeiro, Raimundo F. da Silva Neto, Ricardo B. e Matheus O. da Silva.
+## 📜 Sumário
 
-Seja bem vindo(a) ao desafio do módulo 5.
+1. [Detalhes do projeto](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#1--detalhes-do-projeto)
+2. [Deploy](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#2--deploy)
+3. [Para rodar o projeto](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#3--para-rodar-o-projeto)
+4. [Documentação](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#4--documenta%C3%A7%C3%A3o)
+5. [Tecnologias usadas](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#5--tecnologias-usadas)
+6. [Autor](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#6--autores)
 
-Sua tarefa como desenvolvedor(a) será criar uma API para um PDV (Frente de Caixa). Esse será um projeto piloto, ou seja, no futuro outras funcionalidades serão implementadas.
+## 1. 🔍 Detalhes do projeto
 
+A API PDV_Cubos tem como objetivo controlar as vendas de um comércio fictício. Foi realizado academicamente durante curso de desenvolvimento de software back-end da Cubos Academy.
 
-**Importante 1: Sempre que a validação de uma requisição falhar, responda com código de erro e mensagem adequada à situação, ok?**
+#### Cenário:
 
-**Importante 2: Para endpoints de cadastro/atualização os objetos de requisição devem conter as propriedades equivalentes as colunas das tabelas.**
+- O sistema permite o cadastro de usuário, com validação de informações;
+- O sistema permite apenas as requisições de cadastro de usuário, login e listagem de categorias sem autenticação por meio de JWT;
+- Com o usuário logado, o sistema permite a edição e detalhmento das informações do usuário, criação, edição, detalhamento e listagem de clientes, criação, edição, detalhamento, deleção e listagem de produtos, criação e listagem de pedidos;
+- O sistema permite a inclusão de imagens de produtos, que são armazenados em um serviço de armazenamento na nuvem;
+- O sistema decrementa automaticamente quantidade de itens no estoque de acordo com o pedido realizado;
+- O sistema encaminha e-mail ao cliente em casa de pedido efetuado com sucesso;
 
-**Exemplo:**
+## 2. ✅ Deploy
 
-```javascript
-// Corpo da requisição para cadastro de usuário (body)
+A API está rodando no servidor da Cyclic: [Link do deploy](https://neyvelopers.cyclic.app/).
+
+Para utilizá-la, basta seguir a documentação presente neste conteúdo.
+
+## 3. 🔌 Para rodar o projeto em ambiente de desenvolvimento
+
+1. Instale as dependências necessárias para rodar a API (relacionadas no package.json):
+
+   ```
+   npm install
+   ```
+
+2. A API utiliza o PostgreSQL como banco de dados rodando em um servidor do [ElephantSQL](https://www.elephantsql.com/). A API também faz uso de um bucket no [BackBlaze](https://www.backblaze.com/) para armazenamento de imagens, bem como de um serviço do [Brevo](https://www.brevo.com/pt/) para servidor SMTP.
+
+3. Dessa forma, se faz necessário criar os respectivos serviços para API consumir e preencher o arquivo `.env` utilizando o `.env.example` de exemplo para os nomes das variáveis de ambiente.
+
+4. Rode a aplicação que o sistema já irá criar as tabelas automaticamente no banco de dados, deixando-as prontas para uso.
+
+5. Você precisará de uma ferramenta de teste de requisições como o [Insomnia](https://insomnia.rest/), devendo seguir as orientações da documentação abaixo para utilizar a API.
+
+6. Você pode rodar os testes automatizados criados com Jest:
+   ```
+   npm run test
+   ```
+
+## 4. 📖 Documentação
+
+### Endpoints
+
+**Login** - Autenticação de usuário <br/>
+
+<details>
+<summary><b>POST login</b></summary>
+
+Logar com um usuário por meio de `email` e `password`. Retorna um token JWT para ser utilizado nas requisições.
+
+**Request**
+
+| **Nome** | **Obrigatório** | **Tipo** | **Descrição**     |
+| :------- | :-------------- | :------- | :---------------- |
+| email    | sim             | `string` | E-mail do usuário |
+| password | sim             | `string` | Senha do usuário  |
+
+> **_NOTA:_** Não é necessário enviar Token JWT via Authorization Header.
+
+Exemplo de requisição:
+
+```json
 {
-    "nome": "José",
-    "email": "jose@email.com",
-    "senha": "jose"
+  "email": "fulano@email.com",
+  "senha": "password"
 }
 ```
 
-**ATENÇÃO: Todos os endpoints deverão atender os requisitos citados acima.**
+**Response**
 
-## **Banco de dados**
+Sucesso
 
-Você precisa criar um Banco de Dados PostgreSQL chamado `pdv`.
-
-**IMPORTANTE: Deverá ser criado no projeto o arquivo SQL que deverá ser o script contendo os comandos de criação das tabelas respeitando os nomes das tabelas e colunas respectivamente, além de, conter os comandos para a inserção das categorias que devem ser previamente cadastradas (estão citadas na 1ª Sprint no item Listar Categorias).**
-
-## **Requisitos obrigatórios**
-
--   A API a ser criada deverá acessar o banco de dados a ser criado `pdv` para persistir e manipular os dados de categorias, clientes, pedidos, produtos e usuários utilizados pela aplicação.
--   O campo id das tabelas no banco de dados deve ser auto incremento, chave primária e não deve permitir edição uma vez criado.
--   Qualquer valor monetário deverá ser representado em centavos (Ex.: R$ 10,00 reais = 1000)
-
-## **Status Codes**
-
-Abaixo, listamos os possíveis **_status codes_** esperados como resposta da API.
-
-```javascript
-// 200 (OK) = requisição bem sucedida
-// 201 (Created) = requisição bem sucedida e algo foi criado
-// 204 (No Content) = requisição bem sucedida, sem conteúdo no corpo da resposta
-// 400 (Bad Request) = o servidor não entendeu a requisição pois está com uma sintaxe/formato inválido
-// 401 (Unauthorized) = o usuário não está autenticado (logado)
-// 403 (Forbidden) = o usuário não tem permissão de acessar o recurso solicitado
-// 404 (Not Found) = o servidor não pode encontrar o recurso solicitado
-// 500 (Internal Server Error) = erro inesperado do servidor
+```json
+{
+  "type": "Bearer",
+  "token": "abcdefghijklmno.abcdefghijklmnopqrstuvwxyz.abcdefghijklmnop"
+}
 ```
 
-<details>
-<summary>1ª Sprint</summary>
-<br>
+`status: 200` <br /><br /> Erro comum
+
+```json
+{
+  "message": "Invalid email and/or password."
+}
+```
+
+`status: 401`
+
+</details>
+<br/>
+
+**Usuário** - Criação de um novo usuário, edição de um usuário e detalhamento do usuário <br/>
 
 <details>
-<summary><b>Banco de Dados</b></summary>
-<br>
+<summary><b>POST usuario</b></summary>
 
-Crie as seguintes tabelas e colunas abaixo: 
+Criar um usuário para poder utilizar a API e jogar D&D.
 
-**ATENÇÃO! Os nomes das tabelas e das colunas a serem criados devem seguir exatamente os nomes listados abaixo.**
+**Request**
 
--   usuarios
-    -   id
-    -   nome
-    -   email (campo único)
-    -   senha
--   categorias
-    -   id
-    -   descricao
+| **Nome** | **Obrigatório** | **Tipo** | **Descrição**    |
+| :------- | :-------------- | :------- | :--------------- |
+| nome     | sim             | `string` | Nome do usuário  |
+| email    | sim             | `string` | Email do usuário |
+| senha    | sim             | `string` | Senha do usuário |
+
+> **_NOTA:_** Não é necessário enviar Token JWT via Authorization Header.
+
+Exemplo de requisição:
+
+```json
+{
+  "nome": "Fulano",
+  "email": "fulano@email.com",
+  "senha": "password"
+}
+```
+
+**Response**
+
+Sucesso
+
+```json
+{
+  "id": 1,
+  "name": "Fulano",
+  "email": "fulano@email.com"
+}
+```
+
+`status: 201` <br /><br /> Erros comuns
+
+```json
+{
+  "message": "Email already exists."
+}
+```
+
+`status: 400`
+
+```json
+{
+  "message": "The password must at least 6 characters"
+}
+```
+
+`status: 400`
 
 </details>
 
 <details>
-<summary><b>Listar categorias</b></summary>
+<summary><b>PUT usuario</b></summary>
 
-#### `GET` `/categoria`
+Editar um usuário. Apenas nome e e-mail podem ser editados (ou apenas um dos dois).
 
-Essa é a rota que será chamada quando o usuário quiser listar todas as categorias cadastradas.
+**Request**
 
-As categorias a seguir precisam ser previamente cadastradas para que sejam listadas no endpoint de listagem das categorias.
+| **Nome** | **Obrigatório** | **Tipo** | **Descrição**    |
+| :------- | :-------------- | :------- | :--------------- |
+| nome     | sim             | `string` | Nome do usuário  |
+| email    | sim             | `string` | Email do usuário |
+| senha    | sim             | `string` | Senha do usuário |
 
-## **Categorias**
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
 
--   Informática
--   Celulares
--   Beleza e Perfumaria
--   Mercado
--   Livros e Papelaria
--   Brinquedos
--   Moda
--   Bebê
--   Games
+Exemplo de requisição:
 
-</details>
+```json
+{
+  "name": "Fulano Editado",
+  "email": "fulano.editado@email.com",
+  "password": "password"
+}
+```
 
-<details>
-<summary><b>Cadastrar usuário</b></summary>
+**Response**
 
-#### `POST` `/usuario`
+Sucesso <br/> `no body returned for response` <br/> `status: 204` <br/><br/> Erros comuns
 
-Essa é a rota que será utilizada para cadastrar um novo usuário no sistema.
+```json
+{
+  "message": "Email already in use"
+}
+```
 
-Critérios de aceite:
-
-    - Validar os campos obrigatórios: 
-        - nome
-        - email
-        - senha
-    - A senha deve ser criptografada utilizando algum algoritmo de criptografia confiável.
-    - O campo e-mail no banco de dados deve ser único para cada registro, não permitindo dois usuários possuírem o mesmo e-mail.
+`status: 400`
 
 </details>
 
 <details>
-<summary><b>Efetuar login do usuário</b></summary>
+<summary><b>GET usuario</b></summary>
 
-#### `POST` `/login`
+Detalhar um usuário. O `id` é enviado automaticamente com o token.
 
-Essa é a rota que permite o usuário cadastrado realizar o login no sistema.
+**Request**
 
-Critérios de aceite:
+`Não é necessário enviar dados na requisição`
 
-    - Validar se o e-mail e a senha estão corretos para o usuário em questão.
-    - Gerar um token de autenticação para o usuário.
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
 
-</details>
+**Response**
 
----
+Sucesso
 
-## **ATENÇÃO**: Todas as funcionalidades (endpoints) a seguir, a partir desse ponto, deverão exigir o token de autenticação do usuário logado, recebendo no header com o formato Bearer Token. Portanto, em cada funcionalidade será necessário validar o token informado.
+```json
+{
+  "id": 1,
+  "name": "Fulano",
+  "email": "fulano@email.com"
+}
+```
 
----
+`status: 200` <br /> Erros comuns
 
-<details>
-<summary><b>Detalhar perfil do usuário logado</b></summary>
+```json
+{
+  "message": "User not found."
+}
+```
 
-#### `GET` `/usuario`
-
-Essa é a rota que permite o usuário logado a visualizar os dados do seu próprio perfil, de acordo com a validação do token de autenticação.
-
-</details>
-
-<details>
-<summary><b>Editar perfil do usuário logado</b></summary>
-
-#### `PUT` `/usuario`
-
-Essa é a rota que permite o usuário logado atualizar informações de seu próprio cadastro, de acordo com a validação do token de autenticação.
-
-Critérios de aceite:
-
-    - Validar os campos obrigatórios: 
-        - nome
-        - email
-        - senha
-    - A senha deve ser criptografada utilizando algum algoritmo de criptografia confiável.
-    - O campo e-mail no banco de dados deve ser único para cada registro, não permitindo dois usuários possuírem o mesmo e-mail.
+`status: 404`
 
 </details>
+<br/>
+
+**Categoria** - Listagem de categorias dos produtos <br/>
 
 <details>
-<summary><b>Efetuar deploy da aplicação</b></summary>
-<br>
+<summary><b>GET categoria</b></summary>
 
-Fazer deploy do projeto e disponibilizar a URL.
+Listar categorias.
+
+**Request**
+
+`Não é necessário enviar dados na requisição`
+
+> **_NOTA:_** Não é necessário enviar Token JWT via Authorization Header.
+
+**Response**
+
+Sucesso
+
+```json
+[
+  {
+    "id": 1,
+    "descricao": "Informática"
+  },
+  {
+    "id": 2,
+    "descricao": "Celulares"
+  },
+  {
+    "id": 3,
+    "descricao": "Beleza e Perfumaria"
+  }
+]
+```
+
+`status: 200`
+
+Sucesso sem retorno
+
+```json
+[]
+```
+
+`status: 200` <br/>
 
 </details>
+<br/>
 
-</details>
-
----
-
-<details>
-<summary>2ª Sprint</summary>
-<br>
+**Cliente** - Criação de um novo cliente, edição de um cliente, listagem de clientes e detalhamento de um cliente <br/>
 
 <details>
-<summary><b>Banco de Dados</b></summary>
-<br>
+<summary><b>POST cliente</b></summary>
 
-Crie as seguintes tabelas e colunas abaixo: 
+Criar um cliente.
 
-**ATENÇÃO! Os nomes das tabelas e das colunas a serem criados devem seguir exatamente os nomes listados abaixo.**
+**Request**
 
--   produtos
-    -   id
-    -   descricao
-    -   quantidade_estoque
-    -   valor
-    -   categoria_id
--   clientes
-    -   id
-    -   nome
-    -   email (campo único)
-    -   cpf (campo único) 
-    -   cep 
-    -   rua
-    -   numero
-    -   bairro
-    -   cidade
-    -   estado
+| **Nome** | **Obrigatório** | **Tipo** | **Descrição**                 |
+| :------- | :-------------- | :------- | :---------------------------- |
+| nome     | sim             | `string` | Nome do usuário               |
+| email    | sim             | `string` | Email do usuário              |
+| cpf      | sim             | `string` | CPF do usuário                |
+| cep      | não             | `string` | CEP do endereço do usuário    |
+| rua      | não             | `string` | Rua do endereço do usuário    |
+| numero   | não             | `string` | Número do endereço do usuário |
+| bairro   | não             | `string` | Bairro do endereço do usuário |
+| cidade   | não             | `string` | Cidade do endereço do usuário |
+| estado   | não             | `string` | Estado do endereço do usuário |
 
-</details>
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
 
----
+Exemplo de requisição:
 
-## **ATENÇÃO**: Todas as funcionalidades (endpoints) a seguir, a partir desse ponto, deverão exigir o token de autenticação do usuário logado, recebendo no header com o formato Bearer Token. Portanto, em cada funcionalidade será necessário validar o token informado.
+```json
+{
+  "nome": "Ciclano",
+  "email": "ciclano@gmail.com",
+  "cpf": "12345678911",
+  "cep": "12345678",
+  "rua": "Rua 1",
+  "numero": "11-A",
+  "bairro": "Bairro 1",
+  "cidade": "Cidade 1",
+  "estado": "Estado 1"
+}
+```
 
----
+**Response**
 
-<details>
-<summary><b>Cadastrar Produto</b></summary>
+Sucesso
 
-#### `POST` `/produto`
+```json
+{
+  "id": 3,
+  "nome": "Ciclano",
+  "email": "ciclano@gmail.com",
+  "cpf": "12345678911",
+  "cep": "12345678",
+  "rua": "Rua 1",
+  "numero": "11-A",
+  "bairro": "Bairro 1",
+  "cidade": "Cidade 1",
+  "estado": "Estado 1"
+}
+```
 
-Essa é a rota que permite o usuário logado cadastrar um novo produto no sistema.
+`status: 201` <br /><br /> Erros comuns
 
-Critérios de aceite:
+```json
+{
+  "message": "Client already exists."
+}
+```
 
-    -   Validar os campos obrigatórios:
-        -   descricao
-        -   quantidade_estoque
-        -   valor
-        -   categoria_id
-    -   A categoria informada na qual o produto será vinculado deverá existir.
-
-</details>
-
-<details>
-<summary><b>Editar dados do produto</b></summary>
-
-#### `PUT` `/produto/:id`
-
-Essa é a rota que permite o usuário logado a atualizar as informações de um produto cadastrado.
-
-Critérios de aceite:
-
-    -   Validar se existe produto para o id enviado como parâmetro na rota.
-    -   Validar os campos obrigatórios:
-        -   descricao
-        -   quantidade_estoque
-        -   valor
-        -   categoria_id
-    -   A categoria informada na qual o produto será vinculado deverá existir.
-
-</details>
-
-<details>
-<summary><b>Listar Produtos</b></summary>
-
-#### `GET` `/produto`
-
-Essa é a rota que será chamada quando o usuário logado quiser listar todos os produtos cadastrados.
-
-Deveremos incluir um parâmetro do tipo query **categoria_id** para que seja possível consultar produtos por categorias, de modo, que serão filtrados de acordo com o id de uma categoria.
-
-Critérios de aceite:
-
-    - Caso seja enviado o parâmetro do tipo query **categoria_id**, filtrar os produtos de acordo com a categoria, caso o id de categoria informada exista.
-    - Caso não seja informado o parâmetro do tipo query **categoria_id** todos os produtos cadastrados deverão ser retornados.
-
-</details>
-
-<details>
-<summary><b>Detalhar Produto</b></summary>
-
-#### `GET` `/produto/:id`
-
-Essa é a rota que permite o usuário logado obter um de seus produtos cadastrados.  
-
-Critérios de aceite:
-
-    -   Validar se existe produto para o id enviado como parâmetro na rota.
+`status: 400`
 
 </details>
 
 <details>
-<summary><b>Excluir Produto por ID</b></summary>
+<summary><b>GET cliente</b></summary>
 
-#### `DELETE` `/produto/:id`
+Listar clientes.
 
-Essa é a rota que será chamada quando o usuário logado quiser excluir um de seus produtos cadastrados.  
+**Request**
 
-Critérios de aceite:
+`Não é necessário enviar dados na requisição`
 
-    -   Validar se existe produto para o id enviado como parâmetro na rota.
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
 
-</details>
+**Response**
 
-<details>
-<summary><b>Cadastrar Cliente</b></summary>
+Sucesso
 
-#### `POST` `/cliente`
+```json
+[
+  {
+    "id": 1,
+    "nome": "Beltrano",
+    "email": "beltrano@email.com",
+    "cpf": "12345678910",
+    "cep": null,
+    "rua": null,
+    "numero": null,
+    "bairro": null,
+    "cidade": null,
+    "estado": null
+  },
+  {
+    "id": 2,
+    "nome": "Ciclano",
+    "email": "ciclano@gmail.com",
+    "cpf": "12345678911",
+    "cep": "12345678",
+    "rua": "Rua 1",
+    "numero": "11-A",
+    "bairro": "Bairro 1",
+    "cidade": "Cidade 1",
+    "estado": "Estado 1"
+  }
+]
+```
 
-Essa é a rota que permite usuário logado cadastrar um novo cliente no sistema.
+`status: 200`
 
-Critérios de aceite:
+Sucesso sem retorno
 
-    -   Validar os campos obrigatórios:
-        -   nome
-        -   email
-        -   cpf
-    -   O campo e-mail no banco de dados deve ser único para cada registro, não permitindo dois clientes possuírem o mesmo e-mail.
-    -   O campo cpf no banco de dados deve ser único para cada registro, não permitindo dois clientes possuírem o mesmo cpf.
+```json
+[]
+```
 
-</details>
-
-<details>
-<summary><b>Editar dados do cliente</b></summary>
-
-#### `PUT` `/cliente/:id`
-
-Essa é a rota que permite o usuário realizar atualização de um cliente cadastrado.
-
-Critérios de aceite:
-
-    -   Validar se existe cliente para o id enviado como parâmetro na rota.
-    -   Validar os campos obrigatórios:
-        -   nome
-        -   email
-        -   cpf
-    -   O campo e-mail no banco de dados deve ser único para cada registro, não permitindo dois clientes possuírem o mesmo e-mail.
-    -   O campo cpf no banco de dados deve ser único para cada registro, não permitindo dois clientes possuírem o mesmo cpf.
-
-</details>
-
-<details>
-<summary><b>Listar Clientes</b></summary>
-
-#### `GET` `/cliente`
-
-Essa é a rota que será chamada quando o usuário logado quiser listar todos os clientes cadastrados.
+`status: 200` <br/>
 
 </details>
 
 <details>
-<summary><b>Detalhar Cliente</b></summary>
+<summary><b>GET cliente-id</b></summary>
 
-#### `GET` `/cliente/:id`
+Detalhar um personagem. O `id` deve ser enviado na url.
 
-Essa é a rota que será chamada quando o usuário logado quiser obter um de seus clientes cadastrados.  
+**Request**
 
-Critérios de aceite:
+| **Nome** | **Obrigatório** | **Tipo** | **Descrição**                    |
+| :------- | :-------------- | :------- | :------------------------------- |
+| id       | sim             | `number` | **Enviar via parâmetro de rota** |
 
-    -   Validar se existe cliente para o id enviado como parâmetro na rota.
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
+
+**Response**
+
+Sucesso
+
+```json
+{
+  "id": 2,
+  "nome": "Ciclano",
+  "email": "ciclano@gmail.com",
+  "cpf": "12345678911",
+  "cep": "12345678",
+  "rua": "Rua 1",
+  "numero": "11-A",
+  "bairro": "Bairro 1",
+  "cidade": "Cidade 1",
+  "estado": "Estado 1"
+}
+```
+
+`status: 200`
+
+Erros comuns
+
+```json
+{
+  "message": "Client not found."
+}
+```
+
+`status: 404`
 
 </details>
 
+<details>
+<summary><b>PUT cliente-id</b></summary>
+
+Alterar os dados do cliente. O `id` deve ser enviado na url.
+
+**Request**
+
+| **Nome** | **Obrigatório** | **Tipo** | **Descrição**                    |
+| :------- | :-------------- | :------- | :------------------------------- |
+| id       | sim             | `number` | **Enviar via parâmetro de rota** |
+| nome     | sim             | `string` | Nome do usuário                  |
+| email    | sim             | `string` | Email do usuário                 |
+| cpf      | sim             | `string` | CPF do usuário                   |
+| cep      | não             | `string` | CEP do endereço do usuário       |
+| rua      | não             | `string` | Rua do endereço do usuário       |
+| numero   | não             | `string` | Número do endereço do usuário    |
+| bairro   | não             | `string` | Bairro do endereço do usuário    |
+| cidade   | não             | `string` | Cidade do endereço do usuário    |
+| estado   | não             | `string` | Estado do endereço do usuário    |
+
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
+
+Exemplo de requisição:
+
+```json
+{
+  "nome": "Ciclano Editado",
+  "email": "ciclano.editado@gmail.com",
+  "cpf": "12345678911",
+  "cep": "12345678",
+  "rua": "Rua 1",
+  "numero": "11-A",
+  "bairro": "Bairro 1",
+  "cidade": "Cidade 1",
+  "estado": "Estado 1"
+}
+```
+
+**Response**
+
+Sucesso <br/> `no body returned for response` <br/> `status: 204` <br/><br/>
+
+Erros comuns
+
+```json
+{
+  "message": "Client not found."
+}
+```
+
+`status: 404`
+
+```json
+{
+  "message": "Email already exists."
+}
+```
+
+`status: 400`
+
+```json
+{
+  "message": "CPF already exists."
+}
+```
+
+`status: 400`
+
+</details>
+<br/>
+
+**Produto** - Criação de um novo produto, edição de um produto, listagem de produtos, deleção de um produto e detalhamento de um produto <br/>
+
+<details>
+<summary><b>POST produto</b></summary>
+
+Criar um produto.
+
+**Request**
+
+| **Nome**           | **Obrigatório** | **Tipo** | **Descrição**                  |
+| :----------------- | :-------------- | :------- | :----------------------------- |
+| descricao          | sim             | `string` | Descrição do produto           |
+| quantidade_estoque | sim             | `number` | Quantidade de itens no estoque |
+| valor              | sim             | `number` | Valor do produto (em centavos) |
+| categoria_id       | sim             | `number` | Id da categoria do produto     |
+| produto_imagem     | não             | `file`   | Arquivo de imagem do produto   |
+
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
+
+**Response**
+
+Sucesso
+
+```json
+{
+  "id": 1,
+  "descricao": "Teclado",
+  "quantidade_estoque": 50,
+  "valor": 10000,
+  "categoria_id": 1,
+  "produto_imagem": "url_da_imagem"
+}
+```
+
+`status: 201` <br /><br /> Erros comuns
+
+```json
+{
+  "message": "Category not found."
+}
+```
+
+`status: 404`
+
+```json
+{
+  "message": "Description already exists."
+}
+```
+
+`status: 400`
+
 </details>
 
+<details>
+<summary><b>GET produto</b></summary>
 
-## Aulas úteis:
+Listar produtos. Pode ser passado um parâmetro query `categoria_id` para listar apenas os produtos de uma categoria específica.
 
--   [Revisão](https://aulas.cubos.academy/turma/503b31f6-db13-4a79-8c3f-132b3d44e96f/aulas/9c29ca80-51cc-4f74-86a3-d27cee05fc48)
--   [Git e fluxo de trabalho em equipe](https://aulas.cubos.academy/turma/503b31f6-db13-4a79-8c3f-132b3d44e96f/aulas/2044890a-5d35-442a-85b1-f8481589a1a9)
--   [Deploy](https://aulas.cubos.academy/turma/503b31f6-db13-4a79-8c3f-132b3d44e96f/aulas/9be7d540-8f4d-4922-9e42-663656bd2475)
--   [Envio de e-mails](https://aulas.cubos.academy/turma/503b31f6-db13-4a79-8c3f-132b3d44e96f/aulas/9b85ed35-9833-444a-a424-80d6eeeeccbc)
--   [Validações e boas práticas](https://aulas.cubos.academy/turma/503b31f6-db13-4a79-8c3f-132b3d44e96f/aulas/61394330-479c-42de-ba1c-176f712990e5)
--   [Upload de arquivos](https://aulas.cubos.academy/turma/503b31f6-db13-4a79-8c3f-132b3d44e96f/aulas/f2821d48-b7b7-486a-8158-afacb145509f)
+**Request**
 
+| **Nome**     | **Obrigatório** | **Tipo** | **Descrição**                             |
+| :----------- | :-------------- | :------- | :---------------------------------------- |
+| categoria_id | não             | `number` | **Enviar via parâmetro de query na rota** |
 
-###### tags: `back-end` `módulo 5` `nodeJS` `PostgreSQL` `API REST` `desafio`
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
+
+Exemplo de requisição:
+
+`url/produto?categoria_id=1`
+
+**Response**
+
+Sucesso
+
+```json
+[
+  {
+    "id": 1,
+    "descricao": "Teclado X",
+    "quantidade_estoque": 25,
+    "valor": 10000,
+    "categoria_id": 1,
+    "produto_imagem": "url/Teclado_X/teclado_x.png"
+  },
+  {
+    "id": 2,
+    "descricao": "Teclado Y",
+    "quantidade_estoque": 48,
+    "valor": 20000,
+    "categoria_id": 1,
+    "produto_imagem": "url/Teclado_Y/teclado_y.png"
+  }
+]
+```
+
+`status: 200`
+
+Sucesso sem retorno
+
+```json
+[]
+```
+
+`status: 200` <br/>
+
+</details>
+
+<details>
+<summary><b>GET produto-id</b></summary>
+
+Detalhar um produto. O `id` deve ser enviado na url.
+
+**Request**
+
+| **Nome** | **Obrigatório** | **Tipo** | **Descrição**                    |
+| :------- | :-------------- | :------- | :------------------------------- |
+| id       | sim             | `number` | **Enviar via parâmetro de rota** |
+
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
+
+**Response**
+
+Sucesso
+
+```json
+{
+  "id": 1,
+  "descricao": "Teclado X",
+  "quantidade_estoque": 25,
+  "valor": 10000,
+  "categoria_id": 1
+}
+```
+
+`status: 200`
+
+Erros comuns
+
+```json
+{
+  "message": "Product not found."
+}
+```
+
+`status: 404`
+
+</details>
+
+<details>
+<summary><b>PUT produto-id</b></summary>
+
+Alterar os dados do produto. O `id` deve ser enviado na url.
+
+**Request**
+
+| **Nome**           | **Obrigatório** | **Tipo** | **Descrição**                    |
+| :----------------- | :-------------- | :------- | :------------------------------- |
+| id                 | sim             | `number` | **Enviar via parâmetro de rota** |
+| descricao          | sim             | `string` | Descrição do produto             |
+| quantidade_estoque | sim             | `number` | Quantidade de itens no estoque   |
+| valor              | sim             | `number` | Valor do produto (em centavos)   |
+| categoria_id       | sim             | `number` | Id da categoria do produto       |
+| produto_imagem     | não             | `file`   | Arquivo de imagem do produto     |
+
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
+
+**Response**
+
+Sucesso <br/> `no body returned for response` <br/> `status: 204` <br/><br/>
+
+Erros comuns
+
+```json
+{
+  "message": "Product not found."
+}
+```
+
+`status: 404`
+
+```json
+{
+  "message": "Category not found."
+}
+```
+
+`status: 404`
+
+```json
+{
+  "message": "Description already exists."
+}
+```
+
+`status: 400`
+
+</details>
+
+<details>
+<summary><b>DELETE produto-id</b></summary>
+
+Deletar um produto. O `id` deve ser enviado na url.
+
+**Request**
+
+| **Nome** | **Obrigatório** | **Tipo** | **Descrição**                    |
+| :------- | :-------------- | :------- | :------------------------------- |
+| id       | sim             | `number` | **Enviar via parâmetro de rota** |
+
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
+
+**Response**
+
+Sucesso  
+`no body returned for response` <br/> `status: 204` <br/>
+
+Erros comuns
+
+```json
+{
+  "message": "Product not found."
+}
+```
+
+`status: 404`
+
+```json
+{
+  "message": "This product is linked to an order."
+}
+```
+
+`status: 400`
+
+</details>
+<br/>
+
+**Pedido** - Criação de um novo pedido e listagem de pedidos <br/>
+
+<details>
+<summary><b>POST pedido</b></summary>
+
+Criar um pedido.
+
+**Request**
+
+| **Nome**           | **Obrigatório** | **Tipo** | **Descrição**                             |
+| :----------------- | :-------------- | :------- | :---------------------------------------- |
+| cliente_id         | sim             | `number` | Id do cliente                             |
+| observacao         | não             | `string` | Observação para o pedido                  |
+| pedido_produtos    | sim             | `array`  | Array com produtos relacionados ao pedido |
+| produto_id         | sim             | `number` | Id do produto                             |
+| quantidade_produto | sim             | `number` | Quantidade de itens do produto            |
+
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
+
+Exemplo de requisição:
+
+```json
+{
+  "cliente_id": 1,
+  "observacao": "Em caso de ausência recomendo deixar com algum vizinho",
+  "pedido_produtos": [
+    {
+      "produto_id": 1,
+      "quantidade_produto": 10
+    },
+    {
+      "produto_id": 2,
+      "quantidade_produto": 20
+    }
+  ]
+}
+```
+
+**Response**
+
+Sucesso
+
+```json
+{
+  "pedido": {
+    "id": 1,
+    "cliente_id": 1,
+    "observacao": "Em caso de ausência recomendo deixar com algum vizinho",
+    "valor_total": 100000
+  },
+  "pedido_produtos": [
+    {
+      "id": 1,
+      "pedido_id": 1,
+      "produto_id": 1,
+      "quantidade_produto": 10,
+      "valor_produto": 5000
+    },
+    {
+      "id": 2,
+      "pedido_id": 1,
+      "produto_id": 2,
+      "quantidade_produto": 20,
+      "valor_produto": 2500
+    }
+  ]
+}
+```
+
+`status: 201` <br /><br /> Erros comuns
+
+```json
+{
+  "message": "Client not found."
+}
+```
+
+`status: 404`
+
+```json
+{
+  "message": "Product not found."
+}
+```
+
+`status: 404`
+
+```json
+{
+  "message": "Insufficient stock."
+}
+```
+
+`status: 400`
+
+</details>
+
+<details>
+<summary><b>GET pedido</b></summary>
+
+Listar pedidos. Pode ser passado um parâmetro query `cliente_id` para listar apenas os pedidos de um cliente específico.
+
+**Request**
+
+| **Nome**   | **Obrigatório** | **Tipo** | **Descrição**                             |
+| :--------- | :-------------- | :------- | :---------------------------------------- |
+| cliente_id | não             | `number` | **Enviar via parâmetro de query na rota** |
+
+> **_NOTA:_** É necessário enviar Token JWT via Authorization Header.
+
+Exemplo de requisição:
+
+`url/pedido?cliente_id=1`
+
+**Response**
+
+Sucesso
+
+```json
+[
+  {
+    "pedido": {
+      "id": 1,
+      "cliente_id": 1,
+      "observacao": "Em caso de ausência recomendo deixar com algum vizinho",
+      "valor_total": 100000
+    },
+    "pedido_produtos": [
+      {
+        "id": 1,
+        "pedido_id": 1,
+        "produto_id": 1,
+        "quantidade_produto": 10,
+        "valor_produto": 5000
+      },
+      {
+        "id": 2,
+        "pedido_id": 1,
+        "produto_id": 2,
+        "quantidade_produto": 20,
+        "valor_produto": 2500
+      }
+    ]
+  },
+  {
+    "pedido": {
+      "id": 2,
+      "cliente_id": 1,
+      "observacao": "Em caso de ausência recomendo deixar com algum vizinho",
+      "valor_total": 10000
+    },
+    "pedido_produtos": [
+      {
+        "id": 3,
+        "pedido_id": 2,
+        "produto_id": 1,
+        "quantidade_produto": 1,
+        "valor_produto": 5000
+      },
+      {
+        "id": 4,
+        "pedido_id": 2,
+        "produto_id": 2,
+        "quantidade_produto": 2,
+        "valor_produto": 2500
+      }
+    ]
+  }
+]
+```
+
+`status: 200`
+
+Sucesso sem retorno
+
+```json
+[]
+```
+
+`status: 200` <br/>
+
+</details>
+
+## 5. 💻 Tecnologias usadas
+
+Languages, Frameworks & Librarys:  
+![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![Node](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) ![JSON](https://img.shields.io/badge/json-5E5C5C?style=for-the-badge&logo=json&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white) ![NPM](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white) ![ESLint](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white) ![Prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E) ![Nodemon](https://img.shields.io/badge/NODEMON-%23323330.svg?style=for-the-badge&logo=nodemon&logoColor=%BBDEAD) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+
+Organization:  
+![Trello](https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+
+Tests:  
+![Insomnia](https://img.shields.io/badge/Insomnia-5849be?style=for-the-badge&logo=Insomnia&logoColor=white) ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
+
+Database:  
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+
+IDE:  
+![VSCode](https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
+
+## 6. 👨‍💻 Autores
+
+Criado por [Daniel M. Justo](https://www.linkedin.com/in/danielmjusto/), [Matheus O. da Silva](https://www.linkedin.com/in/matheusdevbackend/), [Ney H. M. Ribeiro](https://www.linkedin.com/in/neyhiwerson/), [Raimundo F. da Silva Neto](https://www.linkedin.com/in/raimundo-ferreira-silva-neto/), [Ricardo J. S. Barbosa](https://www.linkedin.com/in/ricardo-santos-barbosa1/).
+
+Obrigado pela visita!

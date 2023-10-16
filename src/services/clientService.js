@@ -1,5 +1,4 @@
 const { findByEmailOrCPF, findByEmailAndDifferentId, findByCpfAndDifferentId, insert, update, findAll, findById } = require('../repositories/clientRepository.js');
-const filterNullProps = require('../utils/filterClientNulls');
 const AppError = require('../errors/AppError');
 
 const executeCreate = async (nome, email, cpf, cep, rua, numero, bairro, cidade, estado) => {
@@ -8,12 +7,12 @@ const executeCreate = async (nome, email, cpf, cep, rua, numero, bairro, cidade,
     throw new AppError('Client already exists.', 400);
   }
   const createdClient = await insert(nome, email, cpf, cep, rua, numero, bairro, cidade, estado);
-  return filterNullProps(createdClient[0]);
+  return createdClient[0];
 };
 
 const executeUpdate = async (id, nome, email, cpf, cep, rua, numero, bairro, cidade, estado) => {
-  const clientById = await findById(id);
-  if (!clientById) {
+  const client = await findById(id);
+  if (!client) {
     throw new AppError('Client not found.', 404);
   }
   const checkEmailAndDifferentId = await findByEmailAndDifferentId(email, id);
@@ -28,11 +27,8 @@ const executeUpdate = async (id, nome, email, cpf, cep, rua, numero, bairro, cid
 };
 
 const executeList = async () => {
-  const userClients = await findAll();
-  const filteredClients = userClients.map((client) => {
-    return filterNullProps(client);
-  });
-  return filteredClients;
+  const clients = await findAll();
+  return clients;
 };
 
 const executeDetail = async (id) => {
@@ -40,7 +36,7 @@ const executeDetail = async (id) => {
   if (!client) {
     throw new AppError('Client not found.', 404);
   }
-  return filterNullProps(client);
+  return client;
 };
 
 module.exports = { executeCreate, executeUpdate, executeList, executeDetail };

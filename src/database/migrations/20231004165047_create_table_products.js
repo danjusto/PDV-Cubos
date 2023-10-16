@@ -5,6 +5,7 @@ exports.up = function (knex) {
     table.integer('quantidade_estoque').notNullable();
     table.integer('valor').notNullable();
     table.integer('categoria_id').notNullable().references('id').inTable('categories');
+    table.string('produto_imagem', 255);
   });
 };
 

@@ -12,16 +12,20 @@ const findById = async (id) => {
   return await knex('products').where('id', id).first();
 };
 
-const insert = async (descricao, quantidade_estoque, valor, categoria_id) => {
-  return await knex('products').insert({ descricao, quantidade_estoque, valor, categoria_id }).returning(['id', 'descricao', 'quantidade_estoque', 'valor', 'categoria_id']);
+const findByIdAndInexistingOrder = async (id) => {
+  return await knex('products').join('order_products', 'products.id', 'order_products.produto_id').select('products.id').where('products.id', id).first();
+};
+
+const insert = async (descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
+  return await knex('products').insert({ descricao, quantidade_estoque, valor, categoria_id, produto_imagem }).returning(['*']);
 };
 
 const remove = async (id) => {
   return await knex('products').where('id', id).del();
 };
 
-const update = async (id, descricao, quantidade_estoque, valor, categoria_id) => {
-  return await knex('products').where('id', id).update({ descricao, quantidade_estoque, valor, categoria_id });
+const update = async (id, descricao, quantidade_estoque, valor, categoria_id, produto_imagem) => {
+  return await knex('products').where('id', id).update({ descricao, quantidade_estoque, valor, categoria_id, produto_imagem });
 };
 
 const findByDescription = async (descricao) => {
@@ -32,4 +36,8 @@ const findByDescriptionAndDifferentId = async (descricao, id) => {
   return await knex('products').whereILike('descricao', descricao).andWhere('id', '!=', id).first();
 };
 
-module.exports = { insert, findAll, findById, remove, findByCategory, update, findByDescription, findByDescriptionAndDifferentId };
+const decrementStock = async (id, quantidade_estoque) => {
+  return await knex('products').where('id', id).update({ quantidade_estoque });
+};
+
+module.exports = { insert, findAll, findById, remove, findByCategory, update, findByDescription, findByDescriptionAndDifferentId, findByIdAndInexistingOrder, decrementStock };
