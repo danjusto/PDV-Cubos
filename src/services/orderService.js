@@ -31,7 +31,7 @@ const executeCreate = async (cliente_id, observacao, produto_pedidos) => {
     listOrderProducts.push(orderProducts[0]);
     decrementStock(products[index].id, products[index].quantidade_estoque - produto.quantidade_produto);
   }
-  sendEmail(client.nome, client.email);
+  sendEmail(client.nome, client.email, newOrder[0].id, valor_total / 100);
   return {
     pedido: newOrder[0],
     pedido_produtos: listOrderProducts,
