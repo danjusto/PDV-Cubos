@@ -8,9 +8,9 @@ const sendEmail = async (clientName, email, orderId, total) => {
     total,
   });
   await transporter.sendMail({
-    from: '"Neyvelopers" <testador.email.sender@gmail.com',
+    from: '"PDV-Cubos" <testador.email.sender@gmail.com',
     to: email,
-    subject: 'Pedido Neyvelopers',
+    subject: 'Pedido PDV-Cubos',
     html: html,
   });
 };
