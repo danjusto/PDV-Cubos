@@ -6,7 +6,7 @@ const fileCheck = async (file, descricao) => {
 
 const removeFile = async (productImage) => {
   const pathImage = productImage.replace(process.env.BUCKET_BASE_URL, '');
-  const preparedPathImage = pathImage.replace('%20', ' ');
+  const preparedPathImage = pathImage.replaceAll('%20', ' ');
   deleteFile(preparedPathImage);
 };
 
