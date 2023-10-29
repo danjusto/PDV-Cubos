@@ -65,7 +65,7 @@ const executeRemove = async (id) => {
   if (checkInexistingOrder) {
     throw new AppError('This product is linked to an order.', 400);
   }
-  removeFile(product);
+  removeFile(product.produto_imagem);
   remove(id);
 };
 
