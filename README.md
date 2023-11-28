@@ -26,7 +26,7 @@ A API PDV_Cubos tem como objetivo controlar as vendas de um comércio fictício.
 
 ## 2. ✅ Deploy
 
-A API está rodando no servidor da Cyclic: [Link do deploy](https://neyvelopers.cyclic.app/).
+A API está rodando no servidor da Cyclic: [Link do deploy](https://pdv-deploy-cubos.cyclic.app).
 
 Para utilizá-la, basta seguir a documentação presente neste conteúdo.
 
