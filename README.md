@@ -4,12 +4,12 @@ API desenvolvida como desafio final do curso de desenvolvimento de software back
 
 ## 📜 Sumário
 
-1. [Detalhes do projeto](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#1--detalhes-do-projeto)
-2. [Deploy](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#2--deploy)
-3. [Para rodar o projeto](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#3--para-rodar-o-projeto)
-4. [Documentação](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#4--documenta%C3%A7%C3%A3o)
-5. [Tecnologias usadas](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#5--tecnologias-usadas)
-6. [Autor](https://github.com/iadevmatth/desafio-backend-modulo-05-sistema-pdv-b2b-ifood-t04#6--autores)
+1. [Detalhes do projeto](https://github.com/danjusto/PDV-Cubos#1--detalhes-do-projeto)
+2. [Deploy](https://github.com/iadevmatth/danjusto/PDV-Cubos#2--deploy)
+3. [Para rodar o projeto](https://github.com/danjusto/PDV-Cubos#3--para-rodar-o-projeto)
+4. [Documentação](https://github.com/iadevmatth/danjusto/PDV-Cubos#4--documenta%C3%A7%C3%A3o)
+5. [Tecnologias usadas](https://github.com/danjusto/PDV-Cubos#5--tecnologias-usadas)
+6. [Autor](https://github.com/danjusto/PDV-Cubos#6--autor)
 
 ## 1. 🔍 Detalhes do projeto
 
@@ -966,7 +966,7 @@ Database:
 IDE:  
 ![VSCode](https://img.shields.io/badge/VSCode-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
 
-## 6. 👨‍💻 Autores
+## 6. 👨‍💻 Autor
 
 Criado por [Daniel M. Justo](https://www.linkedin.com/in/danielmjusto/), [Matheus O. da Silva](https://www.linkedin.com/in/matheusdevbackend/), [Ney H. M. Ribeiro](https://www.linkedin.com/in/neyhiwerson/), [Raimundo F. da Silva Neto](https://www.linkedin.com/in/raimundo-ferreira-silva-neto/), [Ricardo J. S. Barbosa](https://www.linkedin.com/in/ricardo-santos-barbosa1/).
 
